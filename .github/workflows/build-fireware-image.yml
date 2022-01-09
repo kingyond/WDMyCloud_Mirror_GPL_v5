@@ -24,6 +24,7 @@ jobs:
       run: |
         sudo -E apt-get -qq update
         sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-1804)
+        chmod +x scripts/*
         sudo ./scripts/preset-build-env.sh
 
     - name: Download Src

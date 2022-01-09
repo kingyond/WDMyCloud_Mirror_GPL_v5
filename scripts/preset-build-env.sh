@@ -11,7 +11,7 @@ systemd sharutils time zip xsltproc libxml2-dev zlib1g-dev libselinux1-dev \
 dh-php uuid-dev libblkid-dev libdevmapper-dev libpopt-dev libreadline-dev unzip \
 dos2unix libusb-dev
 apt-get upgrade -y
-#dpkg --add-architecture armhf
-#apt-get update
+dpkg --add-architecture armhf
+apt-get update
 apt-get install -y crossbuild-essential-armhf
 apt-get install -y u-boot-tools libelf-dev
