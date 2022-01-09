@@ -51,8 +51,8 @@ jobs:
     - name: Build the root file system
       run: |
         cd $HOME_DIR/firmware/ramdisk
-        tar zxf rootfs.tar.gz
-        ./create_ramdisk.sh
+        sudo tar zxf rootfs.tar.gz
+        sudo ./create_ramdisk.sh
         cp -f uRamdisk ../merge/
 
     - name: Non-Open Source include all non-open source binaries
