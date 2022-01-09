@@ -1,0 +1,30 @@
+name: WDMyCloud_Mirror_GPL_v5 Image
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 0 * * *
+
+env:
+  SRC_URL: https://downloads.wdc.com/gpl/WDMyCloud_Mirror_GPL_v5.18.117_20211022.tar.gz
+  HOME_DIR: env.GITHUB_WORKSPACE/WDMyCloud_Mirror_GPL_v5.18.117_20211022
+  OUTPUT_NAME: WDMyCloud_Mirror_GPL_v5.18.117_20211022
+  DEVICE_NAME: WDMyCloud_Mirror
+  UPLOAD_FIRMWARE: true
+  UPLOAD_RELEASE: true
+  TZ: Asia/Shanghai
+
+jobs:
+  Publish:
+    runs-on: ubuntu-18.04
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Initialization Environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        echo $HOME_DIR
