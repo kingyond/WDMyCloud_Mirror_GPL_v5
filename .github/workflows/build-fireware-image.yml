@@ -10,10 +10,9 @@ env:
   SRC_URL: https://downloads.wdc.com/gpl/WDMyCloud_Mirror_GPL_v5.18.117_20211022.tar.gz
   HOME_DIR: WDMyCloud_Mirror_GPL_v5.18.117_20211022
   OUTPUT_NAME: WDMyCloud_Mirror_GPL_v5.18.117_20211022
+  DEVICE_NAME: WDMyCloud_Mirror
   UPLOAD_FIRMWARE: true
-  UPLOAD_COWTRANSFER: false
-  UPLOAD_WETRANSFER: false
-  UPLOAD_RELEASE: false
+  UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
 
 jobs:
@@ -24,16 +23,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Download Src Test
-      run: |
-        wget -q $SRC_URL
-        tar -xzf *.tar.gz
-        rm *.tar.gz
-        pwd
-        ls
-        cd $HOME_DIR/kernel
-        pwd
-
     - name: Initialization Environment
       env:
         DEBIAN_FRONTEND: noninteractive
@@ -42,6 +31,7 @@ jobs:
         sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-1804)
         chmod +x scripts/*
         sudo ./scripts/preset-build-env.sh
+        mkdir -p output/bin
 
     - name: Download Src
       run: |
@@ -76,47 +66,27 @@ jobs:
         cd $HOME_DIR/firmware/merge
         ./merge
         echo "::set-output name=status::success"
-        mv WD-NAS-firmware $OUTPUT_NAME.bin
-        [ -s OUTPUT_NAME ] && echo "$OUTPUT_NAME.bin" >> $GITHUB_ENV
+        cp WD-NAS-firmware GITHUB_WORKSPACE/output/bin/$OUTPUT_NAME.bin
         echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
     - name: Check space usage
       if: (!cancelled())
       run: df -hT
 
+    - name: Upload bin directory
+      uses: actions/upload-artifact@main
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
+      with:
+        name: MyCloud_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        path: output/bin
+
     - name: Organize files
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
-        cd openwrt/bin/targets/*/*
-        rm -rf packages
+        cd output/bin
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
-
-    - name: Upload firmware directory
-      uses: actions/upload-artifact@main
-      if: steps.organize.outputs.status == 'success' && !cancelled()
-      with:
-        name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-        path: ${{ env.FIRMWARE }}
-
-    - name: Upload firmware to cowtransfer
-      id: cowtransfer
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
-      run: |
-        curl -fsSL git.io/file-transfer | sh
-        ./transfer cow --block 2621440 -s -p 64 --no-progress ${FIRMWARE} 2>&1 | tee cowtransfer.log
-        echo "::warning file=cowtransfer.com::$(cat cowtransfer.log | grep https)"
-        echo "::set-output name=url::$(cat cowtransfer.log | grep https | cut -f3 -d" ")"
-
-    - name: Upload firmware to WeTransfer
-      id: wetransfer
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
-      run: |
-        curl -fsSL git.io/file-transfer | sh
-        ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
-        echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
-        echo "::set-output name=url::$(cat wetransfer.log | grep https | cut -f3 -d" ")"
 
     - name: Generate release tag
       id: tag
@@ -124,8 +94,7 @@ jobs:
       run: |
         echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")"
         touch release.txt
-        [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
-        [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
+        echo "WD My Cloud Mirror Fireware"
         echo "::set-output name=status::success"
 
     - name: Upload firmware to release
