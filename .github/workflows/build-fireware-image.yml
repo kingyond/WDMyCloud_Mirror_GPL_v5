@@ -24,6 +24,16 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    - name: Download Src Test
+      run: |
+        wget -q $SRC_URL
+        tar -xzf *.tar.gz
+        rm *.tar.gz
+        pwd
+        ls
+        cd $HOME_DIR/kernel
+        pwd
+
     - name: Initialization Environment
       env:
         DEBIAN_FRONTEND: noninteractive
