@@ -8,7 +8,8 @@ on:
 
 env:
   SRC_URL: https://downloads.wdc.com/gpl/WDMyCloud_Mirror_GPL_v5.18.117_20211022.tar.gz
-  FOLDER: WDMyCloud_Mirror_GPL_v5.18.117_20211022
+  HOME_DIR: ~/WDMyCloud_Mirror_GPL_v5.18.117_20211022
+  FIRMWARE_RELEASE_UPLOAD: true
 
 jobs:
   Publish:
@@ -32,11 +33,6 @@ jobs:
         wget -q $SRC_URL
         tar -xzf *.tar.gz
         rm *.tar.gz
-
-    - name: Load Custom Configuration 
-      run: |
-        cd $FOLDER
-        export HOME_DIR=`pwd`
 
     - name: Build the Linux kernel
       run: |
@@ -64,4 +60,16 @@ jobs:
       run: |
         cd $HOME_DIR/firmware/merge
         ./merge
-        ls
+
+    - name: Deploy Files To Release
+      uses: ncipollo/release-action@v1.8.0
+      if: env.FIRMWARE_RELEASE_UPLOAD == 'true'
+      with:
+        name: openwrt-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}
+        allowUpdates: true
+        replacesArtifacts: true
+        tag: ${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}
+        body: ${{ env.BUILD_DATE }}
+        commit: ${{ env.CURRENT_BRANCH }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        artifacts: ${{ env.OPENWRT_ROOT_PATH }}/bin/targets/${{ env.DEVICE_TARGET }}/${{ env.DEVICE_SUBTARGET }}/*
