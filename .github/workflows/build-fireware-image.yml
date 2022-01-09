@@ -30,11 +30,11 @@ jobs:
     - name: Download Src
       run: |
         wget -q $SRC_URL
+        tar -xzf *.tar.gz
+        rm *.tar.gz
 
     - name: Load Custom Configuration 
       run: |
-        tar -xzf *.tar.gz
-        rm *.tar.gz
         cd $FOLDER
         export HOME_DIR=`pwd`
 
