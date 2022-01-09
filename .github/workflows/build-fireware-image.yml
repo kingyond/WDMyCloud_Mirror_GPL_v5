@@ -56,10 +56,10 @@ jobs:
         sudo ./create_ramdisk.sh
         cp -f uRamdisk ../merge/
 
-    - name: Non-Open Source include all non-open source binaries
+    - name: Include all non-open source binaries
       run: |
         cd $HOME_DIR/firmware/module
-        ./create_image.sh
+        ./mksquashfs.sh
         cp -f image.cfs ../merge/
 
     - name: Build the firmware
