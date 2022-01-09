@@ -8,7 +8,7 @@ on:
 
 env:
   SRC_URL: https://downloads.wdc.com/gpl/WDMyCloud_Mirror_GPL_v5.18.117_20211022.tar.gz
-  HOME_DIR: WDMyCloud_Mirror_GPL_v5.18.117_20211022
+  HOME_DIR: env.GITHUB_WORKSPACE/WDMyCloud_Mirror_GPL_v5.18.117_20211022
   OUTPUT_NAME: WDMyCloud_Mirror_GPL_v5.18.117_20211022
   DEVICE_NAME: WDMyCloud_Mirror
   UPLOAD_FIRMWARE: true
@@ -31,6 +31,7 @@ jobs:
         sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-1804)
         chmod +x scripts/*
         sudo ./scripts/preset-build-env.sh
+        echo "HOME_DIR=$GITHUB_WORKSPACE/$HOME_DIR" >> $GITHUB_ENV
         mkdir -p output/bin
 
     - name: Download Src
@@ -66,7 +67,7 @@ jobs:
         cd $HOME_DIR/firmware/merge
         ./merge
         echo "::set-output name=status::success"
-        cp WD-NAS-firmware GITHUB_WORKSPACE/output/bin/$OUTPUT_NAME.bin
+        cp WD-NAS-firmware $GITHUB_WORKSPACE/output/bin/$OUTPUT_NAME.bin
         echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
     - name: Check space usage
