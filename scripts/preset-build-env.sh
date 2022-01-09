@@ -1,5 +1,5 @@
 #!/bin/bash
-sudo apt-get update && apt-get --no-install-recommends install -y \
+sudo apt-get update && sudo apt-get --no-install-recommends install -y \
 apt-utils apt-file pkg-config git vim sudo net-tools locales pax \
 wget curl intltool tree build-essential devscripts ca-certificates python \
 libncurses-dev bc squashfs-tools \
