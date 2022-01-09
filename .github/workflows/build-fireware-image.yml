@@ -33,8 +33,8 @@ jobs:
 
     - name: Load Custom Configuration 
       run: |
-        tar -xzf *.tar.xz
-        rm *.tar.xz
+        tar -xzf *.tar.gz
+        rm *.tar.gz
         cd $FOLDER
         export HOME_DIR=`pwd`
 
