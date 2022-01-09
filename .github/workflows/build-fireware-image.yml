@@ -1,0 +1,66 @@
+name: WDMyCloud_Mirror_GPL_v5 Image
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 0 * * *
+
+env:
+  SRC_URL: https://downloads.wdc.com/gpl/WDMyCloud_Mirror_GPL_v5.18.117_20211022.tar.gz
+  FOLDER: WDMyCloud_Mirror_GPL_v5.18.117_20211022
+
+jobs:
+  Publish:
+    runs-on: ubuntu-18.04
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Initialization Environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo -E apt-get -qq update
+        sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-1804)
+        ./scripts/preset-build-env.sh
+
+    - name: Download Src
+      run: |
+        wget -q $SRC_URL
+
+    - name: Load Custom Configuration 
+      run: |
+        tar -xzf *.tar.xz
+        rm *.tar.xz
+        cd $FOLDER
+        export HOME_DIR=`pwd`
+
+    - name: Build the Linux kernel
+      run: |
+        cd $HOME_DIR/kernel
+        tar zxvf linux-4.14.22.tar.gz
+        cd linux-4.14.22
+        ./xbuild.sh build
+        cd ..
+        ./build_ext_kernel_module.sh
+
+    - name: Build the root file system
+      run: |
+        cd $HOME_DIR/firmware/ramdisk
+        tar zxf rootfs.tar.gz
+        ./create_ramdisk.sh
+        cp -f uRamdisk ../merge/
+
+    - name: Non-Open Source include all non-open source binaries
+      run: |
+        cd $HOME_DIR/firmware/module
+        ./create_image.sh
+        cp -f image.cfs ../merge/
+
+    - name: Build the firmware
+      run: |
+        cd $HOME_DIR/firmware/merge
+        ./merge
+        ls
