@@ -8,7 +8,7 @@ on:
 
 env:
   SRC_URL: https://downloads.wdc.com/gpl/WDMyCloud_Mirror_GPL_v5.18.117_20211022.tar.gz
-  HOME_DIR: env.GITHUB_WORKSPACE/WDMyCloud_Mirror_GPL_v5.18.117_20211022
+  HOME_DIR: ${{ env.GITHUB_WORKSPACE }}/WDMyCloud_Mirror_GPL_v5.18.117_20211022
   OUTPUT_NAME: WDMyCloud_Mirror_GPL_v5.18.117_20211022
   DEVICE_NAME: WDMyCloud_Mirror
   UPLOAD_FIRMWARE: true
