@@ -45,7 +45,9 @@ jobs:
         cd $HOME_DIR/kernel
         tar zxvf linux-4.14.22.tar.gz
         cd linux-4.14.22
-        cp $GITHUB_WORKSPACE/files/kernel/linux4.14.22/.config $HOME_DIR/kernel
+        cp -f $GITHUB_WORKSPACE/files/kernel/linux4.14.22/.config .
+        cp -f $GITHUB_WORKSPACE/files/kernel/linux4.14.22/xbuild.sh .
+        chmod +x xbuild.sh
 
     - name: Build the Linux kernel
       run: |
