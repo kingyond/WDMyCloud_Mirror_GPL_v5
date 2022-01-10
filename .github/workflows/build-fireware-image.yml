@@ -40,10 +40,16 @@ jobs:
         tar -xzf *.tar.gz
         rm *.tar.gz
 
-    - name: Build the Linux kernel
+  - name: Patch the Linux kernel
       run: |
         cd $HOME_DIR/kernel
         tar zxvf linux-4.14.22.tar.gz
+        cd linux-4.14.22
+        cp files/kernel/linux4.14.22/.config $HOME_DIR/kernel
+
+    - name: Build the Linux kernel
+      run: |
+        cd $HOME_DIR/kernel
         cd linux-4.14.22
         ./xbuild.sh build
         cd ..
