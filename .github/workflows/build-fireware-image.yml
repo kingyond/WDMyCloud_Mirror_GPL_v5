@@ -62,6 +62,11 @@ jobs:
         sudo ./create_ramdisk.sh
         cp -f uRamdisk ../merge/
 
+    - name: Update kernel driver
+      run: |
+        cd $HOME_DIR/firmware/module
+        cp -fu $(find ../../kernel/linux-4.14.22/_install -type f -name "*.ko") crfs/driver/
+
     - name: Include all non-open source binaries
       run: |
         cd $HOME_DIR/firmware/module
