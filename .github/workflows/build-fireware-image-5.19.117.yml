@@ -1,4 +1,4 @@
-name: WDMyCloud_Mirror_GPL_v5 Image
+name: WDMyCloud_Mirror_GPL_v5.19 Image
 
 on:
   repository_dispatch:
@@ -52,6 +52,8 @@ jobs:
         cd $HOME_DIR/kernel
         cd linux-4.14.22
         ./xbuild.sh build
+        ls cp arch/arm/boot/uImage
+        ls $HOME_DIR/firmware/merge/
         cp arch/arm/boot/uImage $HOME_DIR/firmware/merge/uImage_origin
         cp arch/arm/boot/uImage $GITHUB_WORKSPACE/output/bin/uImage_origin
         cd ..
