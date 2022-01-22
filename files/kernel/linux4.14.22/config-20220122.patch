@@ -6,7 +6,6 @@ diff --git a/.config b/.config
  CONFIG_SBITMAP=y
  # CONFIG_STRING_SELFTEST is not set
 -# CONFIG_VIRTUALIZATION is not set
-\ No newline at end of file
 +# CONFIG_VIRTUALIZATION is not set
 +CONFIG_IP_SET=m
 +CONFIG_IP_SET_MAX=256
@@ -27,4 +26,3 @@ diff --git a/.config b/.config
 +CONFIG_IP_SET_HASH_NETIFACE=m
 +CONFIG_IP_SET_LIST_SET=m
 +CONFIG_NF_CONNTRACK_MARK=y
-\ No newline at end of file
