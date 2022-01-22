@@ -47,7 +47,7 @@ jobs:
         cd linux-4.14.22
         chmod +x xbuild.sh
 
-  - name: Build the Linux kernel
+    - name: Build the Linux kernel
       run: |
         cd $HOME_DIR/kernel
         cd linux-4.14.22
