@@ -40,29 +40,22 @@ jobs:
         tar -xzf *.tar.gz
         rm *.tar.gz
 
-    - name: Patch the Linux kernel
+    - name: Extract the Linux kernel
       run: |
         cd $HOME_DIR/kernel
         tar zxvf linux-4.14.22.tar.gz
         cd linux-4.14.22
-        cp -f $GITHUB_WORKSPACE/files/kernel/linux4.14.22/.config .
-        cp -f $GITHUB_WORKSPACE/files/kernel/linux4.14.22/xbuild.sh .
         chmod +x xbuild.sh
 
-    - name: Build the Linux kernel
+  - name: Build the Linux kernel
       run: |
         cd $HOME_DIR/kernel
         cd linux-4.14.22
         ./xbuild.sh build
+        cp arch/arm/boot/uImage $HOME_DIR/firmware/merge/uImage_origin
+        cp arch/arm/boot/uImage $GITHUB_WORKSPACE/output/bin/uImage_origin
         cd ..
         ./build_ext_kernel_module.sh
-
-    - name: Build the root file system
-      run: |
-        cd $HOME_DIR/firmware/ramdisk
-        sudo tar zxf rootfs.tar.gz
-        sudo ./create_ramdisk.sh
-        cp -f uRamdisk ../merge/
 
     - name: Update kernel driver
       run: |
@@ -73,7 +66,43 @@ jobs:
       run: |
         cd $HOME_DIR/firmware/module
         ./mksquashfs.sh
+        cp -f image.cfs ../merge/image_origin.cfs
+        cp image.cfs $GITHUB_WORKSPACE/output/bin/image_origin.cfs
+
+    - name: Patch the Linux kernel
+      run: |
+        cd $HOME_DIR/kernel/linux-4.14.22
+        cp -f $GITHUB_WORKSPACE/files/kernel/linux4.14.22/config-20220122.patch .
+        patch -p1 < config-20220122.patch
+
+    - name: Build the patched Linux kernel
+      run: |
+        cd $HOME_DIR/kernel/linux-4.14.22
+        ./xbuild.sh build
+        cp arch/arm/boot/uImage $HOME_DIR/firmware/merge/uImage
+        cp arch/arm/boot/uImage $GITHUB_WORKSPACE/output/bin/uImage
+        cd ..
+        ./build_ext_kernel_module.sh
+
+    - name: Update patched kernel driver
+      run: |
+        cd $HOME_DIR/firmware/module
+        cp -fu $(find ../../kernel/linux-4.14.22/_install -type f -name "*.ko") crfs/driver/
+
+    - name: Include all patched non-open source binaries
+      run: |
+        cd $HOME_DIR/firmware/module
+        ./mksquashfs.sh
         cp -f image.cfs ../merge/
+        cp image.cfs $GITHUB_WORKSPACE/output/bin/image.cfs
+
+    - name: Build the root file system
+      run: |
+        cd $HOME_DIR/firmware/ramdisk
+        sudo tar zxf rootfs.tar.gz
+        sudo ./create_ramdisk.sh
+        cp -f uRamdisk ../merge/
+        cp uRamdisk $GITHUB_WORKSPACE/output/bin/uRamdisk
 
     - name: Build the firmware
       run: |
@@ -81,6 +110,18 @@ jobs:
         ./merge
         echo "::set-output name=status::success"
         cp WD-NAS-firmware $GITHUB_WORKSPACE/output/bin/$OUTPUT_NAME.bin
+        echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+
+    - name: Build the origin firmware
+      run: |
+        cd $HOME_DIR/firmware/merge
+        mv uImage uImage_patch
+        cp uImage_origin uImage
+        mv image.cfs image_origin.cfs
+        cp image_origin.cfs image.cfs
+        ./merge
+        echo "::set-output name=status::success"
+        cp WD-NAS-firmware $GITHUB_WORKSPACE/output/bin/$(OUTPUT_NAME)_origin.bin
         echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
     - name: Check space usage
