@@ -63,7 +63,7 @@ jobs:
     - name: Update kernel driver
       run: |
         cd $HOME_DIR/firmware/module
-        cp -f $(find ../../kernel/linux-4.14.22/_install/lib/modules/4.14.22-armada-18.09.3/kernel/ -type f -name "*.ko") crfs/driver/
+        #cp -f $(find ../../kernel/linux-4.14.22/_install/lib/modules/4.14.22-armada-18.09.3/kernel/ -type f -name "*.ko") crfs/driver/
 
     - name: Include all non-open source binaries
       run: |
