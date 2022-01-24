@@ -1,6 +1,6 @@
-diff --git a/.CONFIG b/.CONFIG
---- a/.CONFIG
-+++ b/.CONFIG
+diff --git a/.config b/.config
+--- a/.config
++++ b/.config
 @@ -3557,4 +3557,59 @@
  CONFIG_ARCH_HAS_SG_CHAIN=y
  CONFIG_SBITMAP=y
