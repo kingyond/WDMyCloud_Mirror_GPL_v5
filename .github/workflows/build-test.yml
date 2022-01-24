@@ -29,7 +29,7 @@ jobs:
       run: |
         echo "HOME_DIR=$GITHUB_WORKSPACE/$HOME_DIR" >> $GITHUB_ENV
         echo $HOME_DIR
-        echo $OUTPUT_NAME_origin
+        echo $OUTPUT_NAME-origin
         cp files/kernel/linux4.14.22/.config ./
         cp files/kernel/linux4.14.22/* ./
         patch -p1 < config-20220122.patch
