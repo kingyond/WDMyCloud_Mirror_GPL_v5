@@ -57,7 +57,7 @@ jobs:
         ls $HOME_DIR/firmware/merge/
         cp arch/arm/boot/uImage $HOME_DIR/firmware/merge/uImage
         cp arch/arm/boot/uImage $HOME_DIR/firmware/merge/uImage_origin
-        cp arch/arm/boot/uImage $GITHUB_WORKSPACE/output/bin/uImage_origin
+        cp arch/arm/boot/uImage $GITHUB_WORKSPACE/output/bin/uImage-origin
         cd ..
         ./build_ext_kernel_module.sh
 
@@ -74,7 +74,7 @@ jobs:
         ./mksquashfs.sh
         cp -f image.cfs ../merge/image_origin.cfs
         cp image.cfs $GITHUB_WORKSPACE/output/bin/image.cfs
-        cp image.cfs $GITHUB_WORKSPACE/output/bin/image_origin.cfs
+        cp image.cfs $GITHUB_WORKSPACE/output/bin/image-origin.cfs
 
     - name: Build the root file system
       run: |
@@ -93,7 +93,7 @@ jobs:
         cp image_origin.cfs image.cfs
         ./merge
         echo "::set-output name=status::success"
-        cp WD-NAS-firmware $GITHUB_WORKSPACE/output/bin/$OUTPUT_NAME_origin.bin
+        cp WD-NAS-firmware $GITHUB_WORKSPACE/output/bin/$OUTPUT_NAME-origin.bin
         echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
     - name: Patch the Linux kernel
