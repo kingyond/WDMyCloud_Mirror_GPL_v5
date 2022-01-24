@@ -49,8 +49,9 @@ jobs:
 
     - name: Build the Linux kernel
       run: |
-        cd $HOME_DIR/kernel
-        cd linux-4.14.22
+        cd $HOME_DIR/kernel/linux-4.14.22
+        cp -f $GITHUB_WORKSPACE/files/kernel/linux4.14.22/xbuild-20220124.patch .
+        patch -p1 < xbuild-20220124.patch
         ./xbuild.sh build
         ls arch/arm/boot/uImage
         ls $HOME_DIR/firmware/merge/

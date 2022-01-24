@@ -1,0 +1,12 @@
+diff --git a/xbuild.sh b/xbuild.sh
+--- a/xbuild.sh
++++ b/xbuild.sh
+@@ -368,7 +368,7 @@
+     ./scripts/mkuboot.sh -A arm -O linux -T kernel -C none -a 0x00008000 -e 0x00008000 -n 'Kernel' -d arch/arm/boot/zImage_dtb arch/arm/boot/uImage || exit 1
+     rm -rf _install
+     make -j`nproc` modules || exit 1
+-    make modules_install INSTALL_MOD_PATH=_install
++    make modules_install INSTALL_MOD_PATH=_install INSTALL_MOD_STRIP=1
+     if [ "${root_folder_build}" = "NO" ]; then
+         # netatop
+         export KERNELDIR=`pwd`
