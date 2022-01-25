@@ -119,6 +119,8 @@ jobs:
     - name: Include all patched non-open source binaries
       run: |
         cd $HOME_DIR/firmware/module
+        cp -f $GITHUB_WORKSPACE/files/firmware/module/iptables_install.patch .
+        patch -p1 < iptables_install.patch
         ./mksquashfs.sh
         cp -f image.cfs ../merge/
         cp image.cfs $GITHUB_WORKSPACE/output/bin/image.cfs

@@ -1,0 +1,37 @@
+diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
+--- a/crfs/script/iptables_install.sh
++++ b/crfs/script/iptables_install.sh
+@@ -102,6 +102,33 @@
+ 	insmod_when_not_loaded "xt_conntrack.ko"
+ 	insmod_when_not_loaded "xt_state.ko"
+ 	insmod_when_not_loaded "xt_tcpudp.ko"
++  insmod_when_not_loaded "ip_set.ko"
++	insmod_when_not_loaded "ip_set_bitmap_ip.ko"
++	insmod_when_not_loaded "ip_set_bitmap_ipmac.ko"
++	insmod_when_not_loaded "ip_set_bitmap_port.ko"
++	insmod_when_not_loaded "ip_set_hash_ip.ko"
++  insmod_when_not_loaded "ip_set_hash_ipmark.ko"
++  insmod_when_not_loaded "ip_set_hash_ipport.ko"
++  insmod_when_not_loaded "ip_set_hash_ipportip.ko"
++  insmod_when_not_loaded "ip_set_hash_ipportnet.ko"
++  insmod_when_not_loaded "ip_set_hash_mac.ko"
++  insmod_when_not_loaded "ip_set_hash_net.ko"
++  insmod_when_not_loaded "ip_set_hash_netiface.ko"
++	insmod_when_not_loaded "ip_set_hash_netnet.ko"
++	insmod_when_not_loaded "ip_set_hash_netport.ko"
++  insmod_when_not_loaded "ip_set_hash_netportnet.ko"
++  insmod_when_not_loaded "ip_set_list_set.ko"
++  insmod_when_not_loaded "nf_conncount.ko"
++  insmod_when_not_loaded "xt_mark.ko"
++  insmod_when_not_loaded "xt_nat.ko"
++  insmod_when_not_loaded "xt_set.ko"
++  insmod_when_not_loaded "xt_connmark.ko"
++  insmod_when_not_loaded "xt_addrtype.ko"
++  insmod_when_not_loaded "nf_nat.ko"
++  insmod_when_not_loaded "nf_nat_masquerade_ipv4.ko"
++  insmod_when_not_loaded "nfnetlink.ko"
++  insmod_when_not_loaded "nf_nat_ipv4.ko"
++  insmod_when_not_loaded "ip_nf_mangle.ko"
+ 
+ 	# Load recent, log, limit modules for brute force protection on ssh service.
+ 	insmod_when_not_loaded "xt_recent.ko" ip_list_tot=100 ip_pkt_list_tot=210
