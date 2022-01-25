@@ -1,4 +1,4 @@
-name: WDMyCloud_Mirror_GPL_v5.18 Image
+name: WDMyCloud_Mirror_GPL_v5.18 firmware
 
 on:
   repository_dispatch:
