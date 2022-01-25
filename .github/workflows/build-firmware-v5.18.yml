@@ -92,10 +92,6 @@ jobs:
     - name: Build the origin firmware
       run: |
         cd $HOME_DIR/firmware/merge
-        mv uImage uImage_patch
-        cp uImage_origin uImage
-        mv image.cfs image_origin.cfs
-        cp image_origin.cfs image.cfs
         ./merge
         echo "::set-output name=status::success"
         md5sum WD-NAS-firmware > md5sum.txt
