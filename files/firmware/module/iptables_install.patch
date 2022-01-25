@@ -5,6 +5,7 @@ diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
  	insmod_when_not_loaded "xt_conntrack.ko"
  	insmod_when_not_loaded "xt_state.ko"
  	insmod_when_not_loaded "xt_tcpudp.ko"
++  insmod_when_not_loaded "nfnetlink.ko"
 +  insmod_when_not_loaded "ip_set.ko"
 +	insmod_when_not_loaded "ip_set_bitmap_ip.ko"
 +	insmod_when_not_loaded "ip_set_bitmap_ipmac.ko"
@@ -29,7 +30,6 @@ diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
 +  insmod_when_not_loaded "xt_addrtype.ko"
 +  insmod_when_not_loaded "nf_nat.ko"
 +  insmod_when_not_loaded "nf_nat_masquerade_ipv4.ko"
-+  insmod_when_not_loaded "nfnetlink.ko"
 +  insmod_when_not_loaded "nf_nat_ipv4.ko"
 +  insmod_when_not_loaded "ip_nf_mangle.ko"
  
