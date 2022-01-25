@@ -56,7 +56,8 @@ jobs:
         ls arch/arm/boot/uImage
         ls $HOME_DIR/firmware/merge/
         cp arch/arm/boot/uImage $HOME_DIR/firmware/merge/uImage
-        cp arch/arm/boot/uImage $HOME_DIR/firmware/merge/uImage_origin
+        md5sum arch/arm/boot/uImage > md5sum.txt
+        cp md5sum.txt $GITHUB_WORKSPACE/output/bin/uImage-origin-md5sum.txt
         cp arch/arm/boot/uImage $GITHUB_WORKSPACE/output/bin/uImage-origin
         cd ..
         ./build_ext_kernel_module.sh
@@ -75,6 +76,8 @@ jobs:
         cp -f image.cfs ../merge/image_origin.cfs
         cp image.cfs $GITHUB_WORKSPACE/output/bin/image.cfs
         cp image.cfs $GITHUB_WORKSPACE/output/bin/image-origin.cfs
+        md5sum image.cfs > md5sum.txt
+        cp md5sum.txt $GITHUB_WORKSPACE/output/bin/image-origin-md5sum.txt
 
     - name: Build the root file system
       run: |
@@ -83,6 +86,8 @@ jobs:
         sudo ./create_ramdisk.sh
         cp -f uRamdisk ../merge/
         cp uRamdisk $GITHUB_WORKSPACE/output/bin/uRamdisk
+        md5sum uRamdisk > md5sum.txt
+        cp md5sum.txt $GITHUB_WORKSPACE/output/bin/uRamdisk-md5sum.txt
 
     - name: Build the origin firmware
       run: |
@@ -93,6 +98,8 @@ jobs:
         cp image_origin.cfs image.cfs
         ./merge
         echo "::set-output name=status::success"
+        md5sum WD-NAS-firmware > md5sum.txt
+        cp md5sum.txt $GITHUB_WORKSPACE/output/bin/$OUTPUT_NAME-origin-md5sum.txt
         cp WD-NAS-firmware $GITHUB_WORKSPACE/output/bin/$OUTPUT_NAME-origin.bin
         echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
@@ -108,6 +115,8 @@ jobs:
         ./xbuild.sh build
         cp arch/arm/boot/uImage $HOME_DIR/firmware/merge/uImage
         cp arch/arm/boot/uImage $GITHUB_WORKSPACE/output/bin/uImage
+        md5sum arch/arm/boot/uImage > md5sum.txt
+        cp md5sum.txt $GITHUB_WORKSPACE/output/bin/uImage-md5sum.txt
         cd ..
         ./build_ext_kernel_module.sh
 
@@ -124,13 +133,16 @@ jobs:
         ./mksquashfs.sh
         cp -f image.cfs ../merge/
         cp image.cfs $GITHUB_WORKSPACE/output/bin/image.cfs
-        cp image.cfs $GITHUB_WORKSPACE/output/bin/image.cfs
+        md5sum image.cfs > md5sum.txt
+        cp md5sum.txt $GITHUB_WORKSPACE/output/bin/image-md5sum.txt
 
     - name: Build the patched firmware
       run: |
         cd $HOME_DIR/firmware/merge
         ./merge
         echo "::set-output name=status::success"
+        md5sum WD-NAS-firmware > md5sum.txt
+        cp md5sum.txt $GITHUB_WORKSPACE/output/bin/$OUTPUT_NAME-md5sum.txt
         cp WD-NAS-firmware $GITHUB_WORKSPACE/output/bin/$OUTPUT_NAME.bin
         echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
