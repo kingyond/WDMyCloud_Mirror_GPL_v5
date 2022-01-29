@@ -1,7 +1,7 @@
 diff --git a/.config b/.config
 --- a/.config
 +++ b/.config
-@@ -3557,4 +3557,74 @@
+@@ -3557,4 +3557,75 @@
  CONFIG_ARCH_HAS_SG_CHAIN=y
  CONFIG_SBITMAP=y
  # CONFIG_STRING_SELFTEST is not set
@@ -77,3 +77,4 @@ diff --git a/.config b/.config
 +CONFIG_NETFILTER_NETLINK_GLUE_CT=y
 +CONFIG_NF_CT_NETLINK_HELPER=m
 +CONFIG_NETFILTER_XT_TARGET_CHECKSUM=m
++CONFIG_NETFILTER_XT_TARGET_DSCP=n
