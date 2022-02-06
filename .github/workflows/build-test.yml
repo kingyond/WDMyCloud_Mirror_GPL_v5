@@ -34,8 +34,7 @@ jobs:
         cp files/kernel/linux4.14.22/* ./
         patch -p1 < config-20220122.patch
         patch -p1 < xbuild-20220124.patch
-        cp -Rf files/firmware/module/crfs ./
-        cp files/firmware/module/* ./
+        cp -r files/firmware/module/ ./
         patch -p1 < iptables_install.patch
 
     - name: Test1
