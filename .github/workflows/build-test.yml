@@ -37,6 +37,7 @@ jobs:
         cp -r files/firmware/module/ ./
         cd module
         patch -p1 < iptables_install.patch
+        cat crfs/script/iptables_install.sh
 
     - name: Test1
       env:
