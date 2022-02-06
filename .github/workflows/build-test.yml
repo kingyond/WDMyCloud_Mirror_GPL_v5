@@ -29,13 +29,13 @@ jobs:
       run: |
         echo "HOME_DIR=$GITHUB_WORKSPACE/$HOME_DIR" >> $GITHUB_ENV
         echo $HOME_DIR
-        echo $OUTPUT_NAME-origin
-        cp files/kernel/linux4.14.22/.config ./
-        cp files/kernel/linux4.14.22/* ./
-        patch -p1 < config-20220122.patch
-        cat .config
-        patch -p1 < xbuild-20220124.patch
-        cat xbuild.sh
+#        echo $OUTPUT_NAME-origin
+#        cp files/kernel/linux4.14.22/.config ./
+#        cp files/kernel/linux4.14.22/* ./
+#        patch -p1 < config-20220122.patch
+#        cat .config
+#        patch -p1 < xbuild-20220124.patch
+#        cat xbuild.sh
         cp -rf files/firmware/module/crfs ./
         cp files/firmware/module/* ./
         patch -p1 < iptables_install.patch
