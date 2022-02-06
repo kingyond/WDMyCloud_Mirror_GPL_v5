@@ -1,7 +1,7 @@
 diff --git a/.config b/.config
 --- a/.config
 +++ b/.config
-@@ -3557,4 +3557,96 @@
+@@ -3557,4 +3557,97 @@
  CONFIG_ARCH_HAS_SG_CHAIN=y
  CONFIG_SBITMAP=y
  # CONFIG_STRING_SELFTEST is not set
@@ -45,6 +45,7 @@ diff --git a/.config b/.config
 +CONFIG_NFT_META=m
 +CONFIG_NFT_RT=m
 +CONFIG_NFT_NUMGEN=m
++CONFIG_NFT_CT=m
 +CONFIG_NF_REJECT_IPV4=m
 +CONFIG_NF_NAT_IPV6=m
 +CONFIG_NF_NAT_PROTO_DCCP=y
