@@ -36,6 +36,9 @@ jobs:
         cat .config
         patch -p1 < xbuild-20220124.patch
         cat xbuild.sh
+        cp -rf files/firmware/module/crfs ./
+        cp files/firmware/module/iptables_install.patch
+        patch -p1 < iptables_install.patch
 
     - name: Test1
       env:
