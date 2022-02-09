@@ -1,11 +1,6 @@
-Index: files/firmware/module/crfs/script/iptables_install.sh
-IDEA additional info:
-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
-<+>UTF-8
-===================================================================
-diff --git a/files/firmware/module/crfs/script/iptables_install.sh b/files/firmware/module/crfs/script/iptables_install.sh
---- a/files/firmware/module/crfs/script/iptables_install.sh	(revision f42e9805bf08ad1edd370ec1a2548fa156b3f59d)
-+++ b/files/firmware/module/crfs/script/iptables_install.sh	(date 1644411323423)
+diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
+--- a/crfs/script/iptables_install.sh
++++ b/crfs/script/iptables_install.sh
 @@ -103,6 +103,70 @@
  	insmod_when_not_loaded "xt_state.ko"
  	insmod_when_not_loaded "xt_tcpudp.ko"
