@@ -36,8 +36,8 @@ jobs:
         patch -p1 < xbuild-20220124.patch
         cp -r files/firmware/module/ ./
         cd module
-        patch -p1 < iptables_install.patch
-        cat crfs/script/iptables_install.sh
+        patch -p1 < iptables_install-20220209.patch
+        cat crfs/script/iptables_install-20220209.sh
 
     - name: Test1
       env:
