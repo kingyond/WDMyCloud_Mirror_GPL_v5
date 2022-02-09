@@ -1,7 +1,7 @@
 diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
 --- a/crfs/script/iptables_install.sh
 +++ b/crfs/script/iptables_install.sh
-@@ -103,6 +103,66 @@
+@@ -103,6 +103,65 @@
  	insmod_when_not_loaded "xt_state.ko"
  	insmod_when_not_loaded "xt_tcpudp.ko"
  
@@ -37,7 +37,6 @@ diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
 +  insmod_when_not_loaded "xt_CT.ko"
 +  insmod_when_not_loaded "xt_DSCP.ko"
 +  insmod_when_not_loaded "xt_HL.ko"
-+  insmod_when_not_loaded "xt_LOG.ko"
 +  insmod_when_not_loaded "xt_RATEEST.ko"
 +  insmod_when_not_loaded "xt_REDIRECT.ko"
 +  insmod_when_not_loaded "xt_TCPMSS.ko"
