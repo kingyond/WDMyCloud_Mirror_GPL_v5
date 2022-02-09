@@ -1,7 +1,12 @@
-diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
---- a/crfs/script/iptables_install.sh
-+++ b/crfs/script/iptables_install.sh
-@@ -103,6 +103,100 @@
+Index: files/firmware/module/crfs/script/iptables_install.sh
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/files/firmware/module/crfs/script/iptables_install.sh b/files/firmware/module/crfs/script/iptables_install.sh
+--- a/files/firmware/module/crfs/script/iptables_install.sh	(revision f42e9805bf08ad1edd370ec1a2548fa156b3f59d)
++++ b/files/firmware/module/crfs/script/iptables_install.sh	(date 1644411323423)
+@@ -103,6 +103,70 @@
  	insmod_when_not_loaded "xt_state.ko"
  	insmod_when_not_loaded "xt_tcpudp.ko"
  
@@ -35,34 +40,6 @@ diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
 +  insmod_when_not_loaded "nf_tables_bridge.ko"
 +  insmod_when_not_loaded "nf_tables_inet.ko"
 +  insmod_when_not_loaded "nf_tables_netdev.ko"
-+  insmod_when_not_loaded "nft_compat.ko"
-+  insmod_when_not_loaded "nft_counter.ko"
-+  insmod_when_not_loaded "nft_ct.ko"
-+  insmod_when_not_loaded "nft_dup_netdev.ko"
-+  insmod_when_not_loaded "nft_exthdr.ko"
-+  insmod_when_not_loaded "nft_fib.ko"
-+  insmod_when_not_loaded "nft_fib_inet.ko"
-+  insmod_when_not_loaded "nft_fib_netdev.ko"
-+  insmod_when_not_loaded "nft_fwd_netdev.ko"
-+  insmod_when_not_loaded "nft_hash.ko"
-+  insmod_when_not_loaded "nft_limit.ko"
-+  insmod_when_not_loaded "nft_log.ko"
-+  insmod_when_not_loaded "nft_masq.ko"
-+  insmod_when_not_loaded "nft_meta.ko"
-+  insmod_when_not_loaded "nft_meta_bridge.ko"
-+  insmod_when_not_loaded "nft_nat.ko"
-+  insmod_when_not_loaded "nft_numgen.ko"
-+  insmod_when_not_loaded "nft_objref.ko"
-+  insmod_when_not_loaded "nft_queue.ko"
-+  insmod_when_not_loaded "nft_quota.ko"
-+  insmod_when_not_loaded "nft_redir.ko"
-+  insmod_when_not_loaded "nft_reject.ko"
-+  insmod_when_not_loaded "nft_reject_bridge.ko"
-+  insmod_when_not_loaded "nft_reject_inet.ko"
-+  insmod_when_not_loaded "nft_rt.ko"
-+  insmod_when_not_loaded "nft_set_bitmap.ko"
-+  insmod_when_not_loaded "nft_set_hash.ko"
-+  insmod_when_not_loaded "nft_set_rbtree.ko"
 +  insmod_when_not_loaded "tun.ko"
 +  insmod_when_not_loaded "xt_CHECKSUM.ko"
 +  insmod_when_not_loaded "xt_CT.ko"
@@ -96,13 +73,11 @@ diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
 +  insmod_when_not_loaded "xt_set.ko"
 +  insmod_when_not_loaded "xt_statistic.ko"
 +  insmod_when_not_loaded "xt_TPROXY.ko"
-+  insmod_when_not_loaded "bridge.ko"
-+  insmod_when_not_loaded "br_netfilter.ko"
 +
  	# Load recent, log, limit modules for brute force protection on ssh service.
  	insmod_when_not_loaded "xt_recent.ko" ip_list_tot=100 ip_pkt_list_tot=210
  	insmod_when_not_loaded "xt_LOG.ko"
-@@ -119,6 +213,24 @@
+@@ -119,6 +183,17 @@
  	insmod_no_check "nf_defrag_ipv4.ko"
  	insmod_no_check "nf_conntrack_ipv4.ko"
  
@@ -115,19 +90,12 @@ diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
 +	insmod_no_check "nf_nat_masquerade_ipv4.ko"
 +	insmod_no_check "nf_reject_ipv4.ko"
 +	insmod_no_check "nf_tables_ipv4.ko"
-+	insmod_no_check "nft_chain_nat_ipv4.ko"
-+	insmod_no_check "nft_chain_route_ipv4.ko"
-+	insmod_no_check "nft_dup_ipv4.ko"
-+	insmod_no_check "nft_fib_ipv4.ko"
-+	insmod_no_check "nft_masq_ipv4.ko"
-+	insmod_no_check "nft_redir_ipv4.ko"
-+	insmod_no_check "nft_reject_ipv4.ko"
 +	insmod_no_check "ipt_MASQUERADE.ko"
 +
  	# Load log module for brute force protection on ssh service.
  	insmod_no_check "nf_log_ipv4.ko"
  	insmod_no_check "ipt_LOG.ko"
-@@ -143,6 +255,21 @@
+@@ -143,6 +218,14 @@
  	insmod_no_check "nf_defrag_ipv6.ko"
  	insmod_no_check "nf_conntrack_ipv6.ko"
  
@@ -138,13 +106,6 @@ diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
 +	insmod_no_check "nf_nat_masquerade_ipv6.ko"
 +	insmod_no_check "nf_reject_ipv6.ko"
 +	insmod_no_check "nf_tables_ipv6.ko"
-+	insmod_no_check "nft_chain_nat_ipv6.ko"
-+	insmod_no_check "nft_chain_route_ipv6.ko"
-+	insmod_no_check "nft_dup_ipv6.ko"
-+	insmod_no_check "nft_fib_ipv6.ko"
-+	insmod_no_check "nft_masq_ipv6.ko"
-+	insmod_no_check "nft_redir_ipv6.ko"
-+	insmod_no_check "nft_reject_ipv6.ko"
 +
  	# Load log module for brute force protection on ssh service.
  	insmod_no_check "nf_log_ipv6.ko"
