@@ -1,7 +1,7 @@
 diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
 --- a/crfs/script/iptables_install.sh
 +++ b/crfs/script/iptables_install.sh
-@@ -103,6 +103,70 @@
+@@ -103,6 +103,66 @@
  	insmod_when_not_loaded "xt_state.ko"
  	insmod_when_not_loaded "xt_tcpudp.ko"
  
@@ -69,7 +69,7 @@ diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
  	# Load recent, log, limit modules for brute force protection on ssh service.
  	insmod_when_not_loaded "xt_recent.ko" ip_list_tot=100 ip_pkt_list_tot=210
  	insmod_when_not_loaded "xt_LOG.ko"
-@@ -119,6 +183,17 @@
+@@ -119,6 +183,16 @@
  	insmod_no_check "nf_defrag_ipv4.ko"
  	insmod_no_check "nf_conntrack_ipv4.ko"
  
@@ -87,7 +87,7 @@ diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
  	# Load log module for brute force protection on ssh service.
  	insmod_no_check "nf_log_ipv4.ko"
  	insmod_no_check "ipt_LOG.ko"
-@@ -143,6 +218,14 @@
+@@ -143,6 +218,13 @@
  	insmod_no_check "nf_defrag_ipv6.ko"
  	insmod_no_check "nf_conntrack_ipv6.ko"
  
