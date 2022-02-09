@@ -1,7 +1,7 @@
 diff --git a/.config b/.config
 --- a/.config
 +++ b/.config
-@@ -3557,4 +3557,140 @@
+@@ -3557,4 +3557,141 @@
  CONFIG_ARCH_HAS_SG_CHAIN=y
  CONFIG_SBITMAP=y
  # CONFIG_STRING_SELFTEST is not set
@@ -36,6 +36,7 @@ diff --git a/.config b/.config
 +CONFIG_IP_NF_TARGET_CLUSTERIP=n
 +CONFIG_IP_NF_TARGET_ECN=n
 +CONFIG_IP_NF_TARGET_TTL=n
++CONFIG_IP6_NF_MANGLE=m
 +CONFIG_NF_TABLES=m
 +CONFIG_NF_TABLES_IPV4=m
 +CONFIG_NF_TABLES_IPV6=m
