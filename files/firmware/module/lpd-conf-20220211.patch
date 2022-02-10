@@ -7,4 +7,4 @@ diff --git a/crfs/files/lpd.conf b/crfs/files/lpd.conf
  #   default user_printcap=.printcap  (STRING)
 +
 +default ipv6=1
-\ No newline at end of file
+
