@@ -1,0 +1,10 @@
+diff --git a/crfs/files/lpd.conf b/crfs/files/lpd.conf
+--- a/crfs/files/lpd.conf
++++ b/crfs/files/lpd.conf
+@@ -415,3 +415,5 @@
+ #   default user= daemon  (STRING)
+ #   default /* allow users to use local $HOME/.printcap */@ (FLAG off)
+ #   default user_printcap=.printcap  (STRING)
++
++default ipv6=1
+\ No newline at end of file
