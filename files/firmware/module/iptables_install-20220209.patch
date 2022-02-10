@@ -11,7 +11,7 @@ diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
  	# Insert kernel modules for iptables and netfilter
  	insmod_when_not_loaded "x_tables.ko" || return 1
  	insmod_when_not_loaded "nf_conntrack.ko"
-@@ -103,6 +106,66 @@
+@@ -103,6 +106,64 @@
  	insmod_when_not_loaded "xt_state.ko"
  	insmod_when_not_loaded "xt_tcpudp.ko"
  
@@ -40,7 +40,6 @@ diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
 +  insmod_when_not_loaded "nf_nat_redirect.ko"
 +  insmod_when_not_loaded "nf_tables.ko"
 +  insmod_when_not_loaded "nf_tables_arp.ko"
-+  insmod_when_not_loaded "nf_tables_inet.ko"
 +  insmod_when_not_loaded "nf_tables_netdev.ko"
 +  insmod_when_not_loaded "tun.ko"
 +  insmod_when_not_loaded "xt_CHECKSUM.ko"
@@ -73,12 +72,25 @@ diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
 +  insmod_when_not_loaded "xt_recent.ko"
 +  insmod_when_not_loaded "xt_set.ko"
 +  insmod_when_not_loaded "xt_statistic.ko"
-+  insmod_when_not_loaded "xt_TPROXY.ko"
 +
  	# Load recent, log, limit modules for brute force protection on ssh service.
  	insmod_when_not_loaded "xt_recent.ko" ip_list_tot=100 ip_pkt_list_tot=210
  	insmod_when_not_loaded "xt_LOG.ko"
-@@ -119,6 +182,17 @@
+@@ -111,6 +172,13 @@
+ 	return 0
+ }
+ 
++iptables_common2_setup()
++{
++  insmod_when_not_loaded "nf_tables_inet.ko"
++  insmod_when_not_loaded "xt_TPROXY.ko"
++  return 0
++}
++
+ iptables_setup()
+ {
+ 	# Insert kernel modules for iptables
+@@ -119,6 +187,17 @@
  	insmod_no_check "nf_defrag_ipv4.ko"
  	insmod_no_check "nf_conntrack_ipv4.ko"
  
@@ -96,7 +108,7 @@ diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
  	# Load log module for brute force protection on ssh service.
  	insmod_no_check "nf_log_ipv4.ko"
  	insmod_no_check "ipt_LOG.ko"
-@@ -143,6 +217,14 @@
+@@ -143,6 +222,14 @@
  	insmod_no_check "nf_defrag_ipv6.ko"
  	insmod_no_check "nf_conntrack_ipv6.ko"
  
@@ -111,3 +123,25 @@ diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
  	# Load log module for brute force protection on ssh service.
  	insmod_no_check "nf_log_ipv6.ko"
  	insmod_no_check "ip6t_LOG.ko"
+@@ -151,15 +238,20 @@
+ if [ "$1" == "ipv4" ]; then
+ 	iptables_common_setup
+ 	iptables_setup
++	iptables_common2_setup
+ elif [ "$1" == "ipv6" ]; then
+ 	iptables_common_setup
+ 	ip6tables_setup
++	iptables_common2_setup
+ elif [ "$1" == "all" ]; then
+ 	iptables_common_setup
+ 	iptables_setup
+ 	ip6tables_setup
++	iptables_common2_setup
+ else
+ 	echo "$0 : wrong parameter!"
+ fi
+ 
+ exit 0
++
++}
+\ No newline at end of file
