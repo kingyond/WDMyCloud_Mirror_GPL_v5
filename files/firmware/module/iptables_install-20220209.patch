@@ -1,6 +1,11 @@
+Index: crfs/script/iptables_install.sh
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
 diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
---- a/crfs/script/iptables_install.sh
-+++ b/crfs/script/iptables_install.sh
+--- a/crfs/script/iptables_install.sh	(revision 1a7aaf0c9dc19e9c3c42c5c4b3572465b98d70b6)
++++ b/crfs/script/iptables_install.sh	(date 1644499111371)
 @@ -103,6 +103,66 @@
  	insmod_when_not_loaded "xt_state.ko"
  	insmod_when_not_loaded "xt_tcpudp.ko"
@@ -72,9 +77,6 @@ diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
  	insmod_no_check "nf_defrag_ipv4.ko"
  	insmod_no_check "nf_conntrack_ipv4.ko"
  
-+	insmod_no_check "iptable_mangle.ko"
-+	insmod_no_check "iptable_nat.ko"
-+	insmod_no_check "iptable_raw.ko"
 +	insmod_no_check "nf_defrag_ipv4.ko"
 +	insmod_no_check "nf_dup_ipv4.ko"
 +	insmod_no_check "nf_nat_ipv4.ko"
@@ -82,7 +84,10 @@ diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
 +	insmod_no_check "nf_reject_ipv4.ko"
 +	insmod_no_check "nf_tables_ipv4.ko"
 +	insmod_no_check "ipt_MASQUERADE.ko"
-+
++	insmod_no_check "iptable_mangle.ko"
++	insmod_no_check "iptable_nat.ko"
++	insmod_no_check "iptable_raw.ko"
++	
  	# Load log module for brute force protection on ssh service.
  	insmod_no_check "nf_log_ipv4.ko"
  	insmod_no_check "ipt_LOG.ko"
