@@ -6,13 +6,13 @@ SPDX-License-Identifier: GPL-2.0-or-later
 
 var DEV_NAME = " [WD My Cloud Mirror ™]";
 var MODEL_NAME = "BWVZ";
-var IPV6_FUNCTION = 0;
+var IPV6_FUNCTION = 1;
 var TUNNEL_BROKER_FUNCTION = 0;
-var BONDING_FUNCTION =0;
+var BONDING_FUNCTION =1;
 var LAN_PORT_NUM = 1;
 var VOLUME_NUM = 2;
 var ADDON_FUNCTION = 1;
-var VLAN_FUNCTION =0;
+var VLAN_FUNCTION =1;
 var OLED_FUNCTION =0;
 var POWER_FUNCTION =0;
 var MICROP_FUNCTION = 1;
