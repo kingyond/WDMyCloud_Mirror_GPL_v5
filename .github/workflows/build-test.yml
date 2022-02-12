@@ -27,6 +27,7 @@ jobs:
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
+        sudo -E apt-get -qq install dos2unix
         echo "HOME_DIR=$GITHUB_WORKSPACE/$HOME_DIR" >> $GITHUB_ENV
         echo $HOME_DIR
         echo $OUTPUT_NAME-origin
@@ -40,7 +41,8 @@ jobs:
         cat crfs/script/iptables_install.sh
         patch -p1 < lpd-conf-20220211.patch
         cat crfs/files/lpd.conf
-        patch -p1 < define_js-20220212.patch
+        unix2dos define_js-20220212.patch
+        patch --binary -p1 < define_js-20220212.patch
         cat crfs/web/pages_GT/function/define.js
 
     - name: Test1

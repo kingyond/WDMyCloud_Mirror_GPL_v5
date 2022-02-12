@@ -128,7 +128,8 @@ jobs:
         cp -f $GITHUB_WORKSPACE/files/firmware/module/*.patch .
         patch -p1 < iptables_install-20220209.patch
         patch -p1 < lpd-conf-20220211.patch
-        patch -p1 < define_js-20220212.patch
+        unix2dos define_js-20220212.patch
+        patch --binary -p1 < define_js-20220212.patch
         ./mksquashfs.sh
         cp -f image.cfs ../merge/
         cp image.cfs $GITHUB_WORKSPACE/output/bin/image.cfs
