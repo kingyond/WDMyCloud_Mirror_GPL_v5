@@ -46,4 +46,22 @@ dd if=/dev/zero of=/dev/mtdblock3
 dd if=image.cfs of=/dev/mtdblock3
 
 
+#ssh
+flash_erase /dev/mtd0 0 0
+nandwrite -p /dev/mtd0 u-boot.bin
 
+flash_erase /dev/mtd1 0 0
+nandwrite -p /dev/mtd1 uImage
+
+flash_erase /dev/mtd2 0 0
+nandwrite -p /dev/mtd2 uRamdisk
+
+flash_erase /dev/mtd3 0 0
+nandwrite -p /dev/mtd3 image.cfs
+
+flash_erase /dev/mtd4 0 0
+nandwrite -p /dev/mtd4 rescue_fw
+
+nanddump --noecc --omitoob -f config.bin /dev/mtd5
+nanddump --noecc --omitoob -f reserve1.bin /dev/mtd6
+nanddump --noecc --omitoob -f reserve2.bin /dev/mtd7
