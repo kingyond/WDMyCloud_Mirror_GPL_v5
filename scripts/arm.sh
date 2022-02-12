@@ -65,3 +65,6 @@ nandwrite -p /dev/mtd4 rescue_fw
 nanddump --noecc --omitoob -f config.bin /dev/mtd5
 nanddump --noecc --omitoob -f reserve1.bin /dev/mtd6
 nanddump --noecc --omitoob -f reserve2.bin /dev/mtd7
+
+dmesg
+cat /proc/mtd
