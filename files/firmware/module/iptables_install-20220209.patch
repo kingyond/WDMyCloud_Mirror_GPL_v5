@@ -1,4 +1,3 @@
-Index: crfs/script/iptables_install.sh
 diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
 --- a/crfs/script/iptables_install.sh
 +++ b/crfs/script/iptables_install.sh
