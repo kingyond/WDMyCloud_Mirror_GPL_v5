@@ -131,7 +131,7 @@ diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
  }
  
 +# Force ipv6 install
-+ipv6_install.sh
++./ipv6_install.sh
 +
  if [ "$1" == "ipv4" ]; then
  	iptables_common_setup
