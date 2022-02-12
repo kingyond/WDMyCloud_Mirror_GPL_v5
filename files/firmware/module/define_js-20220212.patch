@@ -1,6 +1,11 @@
+Index: crfs/web/pages_GT/function/define.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
 diff --git a/crfs/web/pages_GT/function/define.js b/crfs/web/pages_GT/function/define.js
---- a/crfs/web/pages_GT/function/define.js
-+++ b/crfs/web/pages_GT/function/define.js
+--- a/crfs/web/pages_GT/function/define.js	(revision dff9f8ee39ab38cf2b4870e67fe530129db682e7)
++++ b/crfs/web/pages_GT/function/define.js	(date 1644664649059)
 @@ -6,13 +6,13 @@
  
  var DEV_NAME = " [WD My Cloud Mirror ™]";
