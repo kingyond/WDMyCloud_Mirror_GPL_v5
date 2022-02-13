@@ -11,7 +11,7 @@ diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
  	# Insert kernel modules for iptables and netfilter
  	insmod_when_not_loaded "x_tables.ko" || return 1
  	insmod_when_not_loaded "nf_conntrack.ko"
-@@ -103,6 +106,67 @@
+@@ -103,6 +106,108 @@
  	insmod_when_not_loaded "xt_state.ko"
  	insmod_when_not_loaded "xt_tcpudp.ko"
  
@@ -35,12 +35,34 @@ diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
 +	insmod_when_not_loaded "ip_set_hash_netport.ko"
 +  insmod_when_not_loaded "ip_set_hash_netportnet.ko"
 +  insmod_when_not_loaded "ip_set_list_set.ko"
++  insmod_when_not_loaded "nf_conntrack_amanda.ko"
++  insmod_when_not_loaded "nf_conntrack_bridge.ko"
++  insmod_when_not_loaded "nf_conntrack_ftp.ko"
++  insmod_when_not_loaded "nf_conntrack_h323.ko"
++  insmod_when_not_loaded "nf_conntrack_irc.ko"
++  insmod_when_not_loaded "nf_conntrack_netbios_ns.ko"
++  insmod_when_not_loaded "nf_conntrack_pptp.ko"
++  insmod_when_not_loaded "nf_conntrack_sane.ko"
++  insmod_when_not_loaded "nf_conntrack_sip.ko"
++  insmod_when_not_loaded "nf_conntrack_snmp.ko"
++  insmod_when_not_loaded "nf_conntrack_tftp.ko"
 +  insmod_when_not_loaded "nf_conntrack_netlink.ko"
 +  insmod_when_not_loaded "nf_nat.ko"
 +  insmod_when_not_loaded "nf_nat_redirect.ko"
 +  insmod_when_not_loaded "nf_tables.ko"
 +  insmod_when_not_loaded "nf_tables_arp.ko"
 +  insmod_when_not_loaded "nf_tables_netdev.ko"
++  insmod_when_not_loaded "nf_conncount.ko"
++  insmod_when_not_loaded "nf_nat_tftp.ko"
++  insmod_when_not_loaded "nf_nat_snmp_basic.ko"
++  insmod_when_not_loaded "nf_nat_sip.ko"
++  insmod_when_not_loaded "nf_nat_pptp.ko"
++  insmod_when_not_loaded "nf_nat_irc.ko"
++  insmod_when_not_loaded "nf_nat_h323.ko"
++  insmod_when_not_loaded "nf_nat_ftp.ko"
++  insmod_when_not_loaded "nf_nat_amanda.ko"
++  insmod_when_not_loaded "nf_flow_table.ko"
++  insmod_when_not_loaded "nf_flow_table_inet.ko"
 +  insmod_when_not_loaded "tun.ko"
 +  insmod_when_not_loaded "xt_CHECKSUM.ko"
 +  insmod_when_not_loaded "xt_CT.ko"
@@ -72,14 +94,33 @@ diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
 +  insmod_when_not_loaded "xt_recent.ko"
 +  insmod_when_not_loaded "xt_set.ko"
 +  insmod_when_not_loaded "xt_statistic.ko"
++  insmod_when_not_loaded "xt_connlimit.ko"
++  insmod_when_not_loaded "xt_helper.ko"
++  insmod_when_not_loaded "xt_FULLCONENAT.ko"
++  insmod_when_not_loaded "xt_MASQUERADE.ko"
++  insmod_when_not_loaded "xt_FLOWOFFLOAD.ko"
++  insmod_when_not_loaded "xt_time.ko"
++  insmod_when_not_loaded "xt_tcpmss.ko"
++  insmod_when_not_loaded "xt_socket.ko"
++  insmod_when_not_loaded "xt_CLASSIFY.ko"
++  insmod_when_not_loaded "xt_pkttype.ko"
++  insmod_when_not_loaded "xt_owner.ko"
++  insmod_when_not_loaded "xt_length.ko"
++  insmod_when_not_loaded "xt_hl.ko"
++  insmod_when_not_loaded "xt_HL.ko"
++  insmod_when_not_loaded "xt_ecn.ko"
 +  insmod_when_not_loaded "llc.ko"
 +  insmod_when_not_loaded "stp.ko"
-+
++  insmod_when_not_loaded "ipt_REJECT.ko"
++  insmod_when_not_loaded "ipt_ECN.ko"
++  insmod_when_not_loaded "tcp_bbr.ko"
++  insmod_when_not_loaded "macvlan.ko"
++  insmod_when_not_loaded "ip_gre.ko"
 +
  	# Load recent, log, limit modules for brute force protection on ssh service.
  	insmod_when_not_loaded "xt_recent.ko" ip_list_tot=100 ip_pkt_list_tot=210
  	insmod_when_not_loaded "xt_LOG.ko"
-@@ -110,6 +174,15 @@
+@@ -110,6 +215,15 @@
  	insmod_when_not_loaded "xt_limit.ko"
  	return 0
  }
@@ -95,7 +136,7 @@ diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
  
  iptables_setup()
  {
-@@ -119,6 +192,17 @@
+@@ -119,6 +233,21 @@
  	insmod_no_check "nf_defrag_ipv4.ko"
  	insmod_no_check "nf_conntrack_ipv4.ko"
  
@@ -104,16 +145,20 @@ diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
 +	insmod_no_check "nf_nat_ipv4.ko"
 +	insmod_no_check "nf_nat_masquerade_ipv4.ko"
 +	insmod_no_check "nf_reject_ipv4.ko"
++	insmod_no_check "nf_socket_ipv4.ko"
++	insmod_no_check "nf_tproxy_ipv4.ko"
 +	insmod_no_check "nf_tables_ipv4.ko"
++	insmod_no_check "nf_flow_table_ipv4.ko"
 +	insmod_no_check "ipt_MASQUERADE.ko"
 +	insmod_no_check "iptable_mangle.ko"
 +	insmod_no_check "iptable_nat.ko"
 +	insmod_no_check "iptable_raw.ko"
++  insmod_no_check "udp_tunnel.ko"
 +
  	# Load log module for brute force protection on ssh service.
  	insmod_no_check "nf_log_ipv4.ko"
  	insmod_no_check "ipt_LOG.ko"
-@@ -143,21 +227,36 @@
+@@ -143,21 +272,41 @@
  	insmod_no_check "nf_defrag_ipv6.ko"
  	insmod_no_check "nf_conntrack_ipv6.ko"
  
@@ -124,6 +169,11 @@ diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
 +	insmod_no_check "nf_nat_masquerade_ipv6.ko"
 +	insmod_no_check "nf_reject_ipv6.ko"
 +	insmod_no_check "nf_tables_ipv6.ko"
++	insmod_no_check "nf_socket_ipv6.ko"
++	insmod_no_check "nf_tproxy_ipv6.ko"
++	insmod_no_check "nf_flow_table_ipv6.ko"
++  insmod_no_check "ip6t_REJECT.ko"
++  insmod_no_check "ip6_udp_tunnel.ko"
 +
  	# Load log module for brute force protection on ssh service.
  	insmod_no_check "nf_log_ipv6.ko"
