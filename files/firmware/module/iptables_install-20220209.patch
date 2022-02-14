@@ -1,5 +1,5 @@
 diff --git a/crfs/script/iptables_install.sh b/crfs/script/iptables_install.sh
-index 268229b..b97e7b3 100644
+index 268229b..f8a5143 100644
 --- a/crfs/script/iptables_install.sh
 +++ b/crfs/script/iptables_install.sh
 @@ -96,6 +96,9 @@ iptables_common_setup()
@@ -12,7 +12,7 @@ index 268229b..b97e7b3 100644
  	# Insert kernel modules for iptables and netfilter
  	insmod_when_not_loaded "x_tables.ko" || return 1
  	insmod_when_not_loaded "nf_conntrack.ko"
-@@ -103,6 +106,109 @@ iptables_common_setup()
+@@ -103,6 +106,111 @@ iptables_common_setup()
  	insmod_when_not_loaded "xt_state.ko"
  	insmod_when_not_loaded "xt_tcpudp.ko"
  
@@ -43,6 +43,7 @@ index 268229b..b97e7b3 100644
 +  insmod_when_not_loaded "nf_conntrack_irc.ko"
 +  insmod_when_not_loaded "nf_conntrack_broadcast.ko"
 +  insmod_when_not_loaded "nf_conntrack_netbios_ns.ko"
++  insmod_when_not_loaded "nf_conntrack_proto_gre.ko"
 +  insmod_when_not_loaded "nf_conntrack_pptp.ko"
 +  insmod_when_not_loaded "nf_conntrack_sane.ko"
 +  insmod_when_not_loaded "nf_conntrack_sip.ko"
@@ -55,6 +56,7 @@ index 268229b..b97e7b3 100644
 +  insmod_when_not_loaded "nf_tables_arp.ko"
 +  insmod_when_not_loaded "nf_tables_netdev.ko"
 +  insmod_when_not_loaded "nf_conncount.ko"
++  insmod_when_not_loaded "nf_nat_proto_gre.ko"
 +  insmod_when_not_loaded "nf_nat_tftp.ko"
 +  insmod_when_not_loaded "nf_nat_snmp_basic.ko"
 +  insmod_when_not_loaded "nf_nat_sip.ko"
@@ -122,7 +124,7 @@ index 268229b..b97e7b3 100644
  	# Load recent, log, limit modules for brute force protection on ssh service.
  	insmod_when_not_loaded "xt_recent.ko" ip_list_tot=100 ip_pkt_list_tot=210
  	insmod_when_not_loaded "xt_LOG.ko"
-@@ -111,6 +217,17 @@ iptables_common_setup()
+@@ -111,6 +219,17 @@ iptables_common_setup()
  	return 0
  }
  
@@ -140,7 +142,7 @@ index 268229b..b97e7b3 100644
  iptables_setup()
  {
  	# Insert kernel modules for iptables
-@@ -119,6 +236,21 @@ iptables_setup()
+@@ -119,6 +238,21 @@ iptables_setup()
  	insmod_no_check "nf_defrag_ipv4.ko"
  	insmod_no_check "nf_conntrack_ipv4.ko"
  
@@ -162,7 +164,7 @@ index 268229b..b97e7b3 100644
  	# Load log module for brute force protection on ssh service.
  	insmod_no_check "nf_log_ipv4.ko"
  	insmod_no_check "ipt_LOG.ko"
-@@ -143,21 +275,41 @@ ip6tables_setup()
+@@ -143,21 +277,41 @@ ip6tables_setup()
  	insmod_no_check "nf_defrag_ipv6.ko"
  	insmod_no_check "nf_conntrack_ipv6.ko"
  
