@@ -1,0 +1,64 @@
+diff --git a/crfs/wd/BVBZ-thermal.xml b/crfs/wd/BVBZ-thermal.xml
+--- a/crfs/wd/BVBZ-thermal.xml
++++ b/crfs/wd/BVBZ-thermal.xml
+@@ -36,29 +36,29 @@
+ 	<!-- set component temperature state and continue -->
+ 	<step name="start"             action="compare_temperature"    source="cpu" index="*" comparison="greater_than"    value="114.0"  interval="10" goto="set_cpu_extreme" next="check_cpu_danger" />
+ 	<step name="check_cpu_danger"  action="compare_temperature"    source="cpu" index="*" comparison="greater_than"    value="104.0" interval="10" goto="set_cpu_danger"  next="check_cpu_hot" />
+-	<step name="check_cpu_hot"     action="compare_temperature"    source="cpu" index="*" comparison="greater_than"    value="99.0" interval="10" goto="set_cpu_hot"     next="check_cpu_warm" />
+-	<step name="check_cpu_warm"    action="compare_temperature"    source="cpu" index="*" comparison="greater_than"    value="89.0" interval="10" goto="set_cpu_warm"    next="check_cpu_content" />
+-	<step name="check_cpu_content" action="compare_temperature"    source="cpu" index="*" comparison="greater_than"    value="79.0" interval="10" goto="set_cpu_content" next="check_cpu_under" />
++	<step name="check_cpu_hot"     action="compare_temperature"    source="cpu" index="*" comparison="greater_than"    value="89.0" interval="10" goto="set_cpu_hot"     next="check_cpu_warm" />
++	<step name="check_cpu_warm"    action="compare_temperature"    source="cpu" index="*" comparison="greater_than"    value="69.0" interval="10" goto="set_cpu_warm"    next="check_cpu_content" />
++	<step name="check_cpu_content" action="compare_temperature"    source="cpu" index="*" comparison="greater_than"    value="49.0" interval="10" goto="set_cpu_content" next="check_cpu_under" />
+ 	<step name="check_cpu_under"   action="compare_temperature"    source="cpu" index="*" comparison="less_than"       value="1.0"  interval="10" goto="set_cpu_under"   next="check_cpu_cool" />
+-	<step name="check_cpu_cool"    action="compare_temperature"    source="cpu" index="*" comparison="less_than"       value="80.0" interval="10" goto="set_cpu_cool"    next="check_pmc_extreme" />
++	<step name="check_cpu_cool"    action="compare_temperature"    source="cpu" index="*" comparison="less_than"       value="50.0" interval="10" goto="set_cpu_cool"    next="check_pmc_extreme" />
+ 
+ 	<step name="check_pmc_extreme" action="compare_temperature"    source="system" index="*" comparison="greater_than" value="85.0" interval="30" goto="set_pmc_extreme" next="check_pmc_danger" />
+ 	<step name="check_pmc_danger"  action="compare_temperature"    source="system" index="*" comparison="greater_than" value="77.0"  interval="30" goto="set_pmc_danger"  next="check_pmc_hot" />
+-	<step name="check_pmc_hot"     action="compare_temperature"    source="system" index="*" comparison="greater_than" value="73.0"  interval="30" goto="set_pmc_hot"     next="check_pmc_warm" />
+-	<step name="check_pmc_warm"    action="compare_temperature"    source="system" index="*" comparison="greater_than" value="64.0"  interval="30" goto="set_pmc_warm"    next="check_pmc_content" />
+-	<step name="check_pmc_content" action="compare_temperature"    source="system" index="*" comparison="greater_than" value="55.0"  interval="30" goto="set_pmc_content" next="check_pmc_under" />
++	<step name="check_pmc_hot"     action="compare_temperature"    source="system" index="*" comparison="greater_than" value="63.0"  interval="30" goto="set_pmc_hot"     next="check_pmc_warm" />
++	<step name="check_pmc_warm"    action="compare_temperature"    source="system" index="*" comparison="greater_than" value="54.0"  interval="30" goto="set_pmc_warm"    next="check_pmc_content" />
++	<step name="check_pmc_content" action="compare_temperature"    source="system" index="*" comparison="greater_than" value="45.0"  interval="30" goto="set_pmc_content" next="check_pmc_under" />
+ 	<step name="check_pmc_under"   action="compare_temperature"    source="system" index="*" comparison="less_than"    value="1.0"   interval="30" goto="set_pmc_under"   next="check_pmc_cool" />
+-	<step name="check_pmc_cool"    action="compare_temperature"    source="system" index="*" comparison="less_than"    value="56.0"  interval="30" goto="set_pmc_cool"    next="init_drv_cool" />
++	<step name="check_pmc_cool"    action="compare_temperature"    source="system" index="*" comparison="less_than"    value="46.0"  interval="30" goto="set_pmc_cool"    next="init_drv_cool" />
+ 
+ 	<step name="init_drv_cool"     action="set_int_value" var="drv_state" value="1" interval="300" next="check_drv_extreme" />
+ 	<step name="check_drv_extreme" action="compare_temperature"    source="drive" index="*" comparison="greater_than" value="74.0" interval="300" goto="set_drv_extreme" next="check_drv_pending" />
+ 	<step name="check_drv_pending" action="compare_temperature"    source="drive" index="*" comparison="greater_than" value="71.0" interval="300" goto="set_drv_pending" next="check_drv_danger" />
+-	<step name="check_drv_danger"  action="compare_temperature"    source="drive" index="*" comparison="greater_than" value="69.0" interval="300" goto="set_drv_danger"  next="check_drv_hot" />
++	<step name="check_drv_danger"  action="compare_temperature"    source="drive" index="*" comparison="greater_than" value="67.0" interval="300" goto="set_drv_danger"  next="check_drv_hot" />
+ 	<step name="check_drv_hot"     action="compare_temperature"    source="drive" index="*" comparison="greater_than" value="64.0" interval="300" goto="set_drv_hot"     next="check_drv_warm" />
+-	<step name="check_drv_warm"    action="compare_temperature"    source="drive" index="*" comparison="greater_than" value="59.0" interval="300" goto="set_drv_warm"    next="check_drv_content" />
+-	<step name="check_drv_content" action="compare_temperature"    source="drive" index="*" comparison="greater_than" value="55.0" interval="300" goto="set_drv_content" next="check_drv_under" />
++	<step name="check_drv_warm"    action="compare_temperature"    source="drive" index="*" comparison="greater_than" value="40.0" interval="300" goto="set_drv_warm"    next="check_drv_content" />
++	<step name="check_drv_content" action="compare_temperature"    source="drive" index="*" comparison="greater_than" value="37.0" interval="300" goto="set_drv_content" next="check_drv_under" />
+ 	<step name="check_drv_under"   action="compare_temperature"    source="drive" index="*" comparison="less_than"    value="1.0"  interval="300" goto="set_drv_under"   next="check_drv_cool" />
+-	<step name="check_drv_cool"    action="compare_temperature"    source="drive" index="*" comparison="less_than"    value="56.0" interval="300" goto="set_drv_cool"    next="check_cpu_shutdown" />
++	<step name="check_drv_cool"    action="compare_temperature"    source="drive" index="*" comparison="less_than"    value="38.0" interval="300" goto="set_drv_cool"    next="check_cpu_shutdown" />
+ 
+ 	<step name="set_cpu_under"   action="set_int_value" var="cpu_state" value="0" next="check_pmc_extreme" />
+ 	<step name="set_cpu_cool"    action="set_int_value" var="cpu_state" value="1" next="check_pmc_extreme" />
+diff --git a/crfs/wd/BWAZ-thermal.xml b/crfs/wd/BWAZ-thermal.xml
+--- a/crfs/wd/BWAZ-thermal.xml
++++ b/crfs/wd/BWAZ-thermal.xml
+@@ -36,11 +36,11 @@
+ 	<!-- set component temperature state and continue -->
+ 	<step name="start"             action="compare_temperature"    source="cpu" index="*" comparison="greater_than"    value="114.0"  interval="10" goto="set_cpu_extreme" next="check_cpu_danger" />
+ 	<step name="check_cpu_danger"  action="compare_temperature"    source="cpu" index="*" comparison="greater_than"    value="104.0" interval="10" goto="set_cpu_danger"  next="check_cpu_hot" />
+-	<step name="check_cpu_hot"     action="compare_temperature"    source="cpu" index="*" comparison="greater_than"    value="99.0" interval="10" goto="set_cpu_hot"     next="check_cpu_warm" />
+-	<step name="check_cpu_warm"    action="compare_temperature"    source="cpu" index="*" comparison="greater_than"    value="89.0" interval="10" goto="set_cpu_warm"    next="check_cpu_content" />
+-	<step name="check_cpu_content" action="compare_temperature"    source="cpu" index="*" comparison="greater_than"    value="79.0" interval="10" goto="set_cpu_content" next="check_cpu_under" />
++	<step name="check_cpu_hot"     action="compare_temperature"    source="cpu" index="*" comparison="greater_than"    value="89.0" interval="10" goto="set_cpu_hot"     next="check_cpu_warm" />
++	<step name="check_cpu_warm"    action="compare_temperature"    source="cpu" index="*" comparison="greater_than"    value="69.0" interval="10" goto="set_cpu_warm"    next="check_cpu_content" />
++	<step name="check_cpu_content" action="compare_temperature"    source="cpu" index="*" comparison="greater_than"    value="49.0" interval="10" goto="set_cpu_content" next="check_cpu_under" />
+ 	<step name="check_cpu_under"   action="compare_temperature"    source="cpu" index="*" comparison="less_than"       value="1.0"  interval="10" goto="set_cpu_under"   next="check_cpu_cool" />
+-	<step name="check_cpu_cool"    action="compare_temperature"    source="cpu" index="*" comparison="less_than"       value="80.0" interval="10" goto="set_cpu_cool"    next="check_pmc_extreme" />
++	<step name="check_cpu_cool"    action="compare_temperature"    source="cpu" index="*" comparison="less_than"       value="50.0" interval="10" goto="set_cpu_cool"    next="check_pmc_extreme" />
+ 
+ 	<step name="check_pmc_extreme" action="compare_temperature"    source="system" index="*" comparison="greater_than" value="69.0" interval="30" goto="set_pmc_extreme" next="check_pmc_danger" />
+ 	<step name="check_pmc_danger"  action="compare_temperature"    source="system" index="*" comparison="greater_than" value="64.0"  interval="30" goto="set_pmc_danger"  next="check_pmc_hot" />
