@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<product_model>YELLOWSTONE</product_model>
+<thermal_config>
+    <options>
+        <scriptInterval value="1" />
+	<scriptIntervalCycle value="570" />
+    </options>
+
+    <init_script_variables>
+        <step name="init_cpu_state" action="set_int_value" var="cpu_state" value="1" />
+	<step name="init_pmc_state" action="set_int_value" var="pmc_state" value="1" />
+	<step name="init_drv_state" action="set_int_value" var="drv_state" value="1" />
+	<step name="init_global_state"    action="set_int_value" var="global_state"    value="1" />
+	<step name="init_ex_global_state" action="set_int_value" var="ex_global_state" value="1" />
+	<step name="init_pending_shutdown" action="set_int_value" var="pending_shutdown" value="0" />
+    </init_script_variables>
+
+    <libraries>
+        <library name="/opt/wd/lib/libredhawk_hwlib_temperature_source.so" source_name="system" type="1" count="1" log_variance="5.0" read_interval="5" />
+	<library name="/opt/wd/lib/libredhawk_hwlib_temperature_source.so" source_name="cpu" type="6" count="1" log_variance="5.0" read_interval="5" />
+	<library name="/opt/wd/lib/libredhawk_hwlib_temperature_source.so" source_name="drive" type="7" count="4" optional="2" log_variance="5.0" read_interval="60" />
+        <library name="/opt/wd/lib/libsprite_hwlib_fan_controller.so"     source_name="system_fan" type="1" count="1" scale_factor="1" initial_value="80" fan_check_retries="3" />
+        <library name="/opt/wd/lib/libsprite_alert_interface.so" />
+	<library name="/opt/wd/lib/libsprite_syslog_alert_interface.so" />
+	<library name="/opt/wd/lib/libsprite_command_alert_interface.so" >
+	  <command name="fan_not_working"            raise="echo '' > /dev/null" clear="up_send_ctl ErrStatus 0029 0; alert_led.sh 29 0" />
+	  <command name="system_over_temperature"    raise="echo '' > /dev/null" clear="up_send_ctl ErrStatus 0001 0" />
+	  <command name="system_under_temperature"   raise="echo '' > /dev/null" clear="up_send_ctl ErrStatus 0002 0" />
+	  <command name="system_pending_shutdown"    raise="echo '' > /dev/null" clear="up_send_ctl ErrStatus 0005 0" />
+	  <command name="thermal_shutdown_immediate" raise="echo '' > /dev/null" clear="up_send_ctl ErrStatus 0006 0" />
+	  <command name="system_safe_mode"    raise="safe_mode.sh 1" clear="safe_mode.sh 0" />
+	</library>
+    </libraries>
+
+    <thermal>
+	<!-- set component temperature state and continue -->
+	<step name="start"             action="compare_temperature"    source="cpu" index="*" comparison="greater_than"    value="114.0"  interval="10" goto="set_cpu_extreme" next="check_cpu_danger" />
+	<step name="check_cpu_danger"  action="compare_temperature"    source="cpu" index="*" comparison="greater_than"    value="104.0" interval="10" goto="set_cpu_danger"  next="check_cpu_hot" />
+	<step name="check_cpu_hot"     action="compare_temperature"    source="cpu" index="*" comparison="greater_than"    value="99.0" interval="10" goto="set_cpu_hot"     next="check_cpu_warm" />
+	<step name="check_cpu_warm"    action="compare_temperature"    source="cpu" index="*" comparison="greater_than"    value="89.0" interval="10" goto="set_cpu_warm"    next="check_cpu_content" />
+	<step name="check_cpu_content" action="compare_temperature"    source="cpu" index="*" comparison="greater_than"    value="79.0" interval="10" goto="set_cpu_content" next="check_cpu_under" />
+	<step name="check_cpu_under"   action="compare_temperature"    source="cpu" index="*" comparison="less_than"       value="1.0"  interval="10" goto="set_cpu_under"   next="check_cpu_cool" />
+	<step name="check_cpu_cool"    action="compare_temperature"    source="cpu" index="*" comparison="less_than"       value="80.0" interval="10" goto="set_cpu_cool"    next="check_pmc_extreme" />
+
+	<step name="check_pmc_extreme" action="compare_temperature"    source="system" index="*" comparison="greater_than" value="69.0" interval="30" goto="set_pmc_extreme" next="check_pmc_danger" />
+	<step name="check_pmc_danger"  action="compare_temperature"    source="system" index="*" comparison="greater_than" value="64.0"  interval="30" goto="set_pmc_danger"  next="check_pmc_hot" />
+	<step name="check_pmc_hot"     action="compare_temperature"    source="system" index="*" comparison="greater_than" value="59.0"  interval="30" goto="set_pmc_hot"     next="check_pmc_warm" />
+	<step name="check_pmc_warm"    action="compare_temperature"    source="system" index="*" comparison="greater_than" value="54.0"  interval="30" goto="set_pmc_warm"    next="check_pmc_content" />
+	<step name="check_pmc_content" action="compare_temperature"    source="system" index="*" comparison="greater_than" value="45.0"  interval="30" goto="set_pmc_content" next="check_pmc_under" />
+	<step name="check_pmc_under"   action="compare_temperature"    source="system" index="*" comparison="less_than"    value="1.0"   interval="30" goto="set_pmc_under"   next="check_pmc_cool" />
+	<step name="check_pmc_cool"    action="compare_temperature"    source="system" index="*" comparison="less_than"    value="46.0"  interval="30" goto="set_pmc_cool"    next="init_drv_cool" />
+
+	<step name="init_drv_cool"     action="set_int_value" var="drv_state" value="1" interval="570" next="check_drv_extreme" />
+	<step name="check_drv_extreme" action="compare_temperature"    source="drive" index="*" comparison="greater_than" value="74.0" interval="570" goto="set_drv_extreme" next="check_drv_pending" />
+	<step name="check_drv_pending" action="compare_temperature"    source="drive" index="*" comparison="greater_than" value="71.0" interval="570" goto="set_drv_pending" next="check_drv_danger" />
+	<step name="check_drv_danger"  action="compare_temperature"    source="drive" index="*" comparison="greater_than" value="67.0" interval="570" goto="set_drv_danger"  next="check_drv_hot" />
+	<step name="check_drv_hot"     action="compare_temperature"    source="drive" index="*" comparison="greater_than" value="64.0" interval="570" goto="set_drv_hot"     next="check_drv_warm" />
+	<step name="check_drv_warm"    action="compare_temperature"    source="drive" index="*" comparison="greater_than" value="40.0" interval="570" goto="set_drv_warm"    next="check_drv_content" />
+	<step name="check_drv_content" action="compare_temperature"    source="drive" index="*" comparison="greater_than" value="37.0" interval="570" goto="set_drv_content" next="check_drv_under" />
+	<step name="check_drv_under"   action="compare_temperature"    source="drive" index="*" comparison="less_than"    value="1.0"  interval="570" goto="set_drv_under"   next="check_drv_cool" />
+	<step name="check_drv_cool"    action="compare_temperature"    source="drive" index="*" comparison="less_than"    value="38.0" interval="570" goto="set_drv_cool"    next="check_cpu_shutdown" />
+
+	<step name="set_cpu_under"   action="set_int_value" var="cpu_state" value="0" next="check_pmc_extreme" />
+	<step name="set_cpu_cool"    action="set_int_value" var="cpu_state" value="1" next="check_pmc_extreme" />
+	<step name="set_cpu_content" action="set_int_value" var="cpu_state" value="2" next="check_pmc_extreme" />
+	<step name="set_cpu_warm"    action="set_int_value" var="cpu_state" value="3" next="check_pmc_extreme" />
+	<step name="set_cpu_hot"     action="set_int_value" var="cpu_state" value="4" next="check_pmc_extreme" />
+	<step name="set_cpu_danger"  action="set_int_value" var="cpu_state" value="5" next="check_pmc_extreme" />
+	<step name="set_cpu_extreme" action="set_int_value" var="cpu_state" value="7" next="check_pmc_extreme" />
+
+	<step name="set_pmc_under"   action="set_int_value" var="pmc_state" value="0" next="init_drv_cool" />
+	<step name="set_pmc_cool"    action="set_int_value" var="pmc_state" value="1" next="init_drv_cool" />
+	<step name="set_pmc_content" action="set_int_value" var="pmc_state" value="2" next="init_drv_cool" />
+	<step name="set_pmc_warm"    action="set_int_value" var="pmc_state" value="3" next="init_drv_cool" />
+	<step name="set_pmc_hot"     action="set_int_value" var="pmc_state" value="4" next="init_drv_cool" />
+	<step name="set_pmc_danger"  action="set_int_value" var="pmc_state" value="5" next="init_drv_cool" />
+	<step name="set_pmc_extreme" action="set_int_value" var="pmc_state" value="7" next="init_drv_cool" />
+
+	<step name="set_drv_under"   action="set_int_value" var="drv_state" value="0" next="check_cpu_shutdown" />
+	<step name="set_drv_cool"    action="set_int_value" var="drv_state" value="1" next="check_cpu_shutdown" />
+	<step name="set_drv_content" action="set_int_value" var="drv_state" value="2" next="check_cpu_shutdown" />
+	<step name="set_drv_warm"    action="set_int_value" var="drv_state" value="3" next="check_cpu_shutdown" />
+	<step name="set_drv_hot"     action="set_int_value" var="drv_state" value="4" next="check_cpu_shutdown" />
+	<step name="set_drv_danger"  action="set_int_value" var="drv_state" value="5" next="check_cpu_shutdown" />
+	<step name="set_drv_pending" action="set_int_value" var="drv_state" value="6" next="check_cpu_shutdown" />
+	<step name="set_drv_extreme" action="set_int_value" var="drv_state" value="7" next="check_cpu_shutdown" />
+
+	<!-- do shutdown if necessary and continue -->
+	<step name="check_cpu_shutdown" action="compare_int_value" var="cpu_state" comparison="greater_than" value="6" goto="send_critical_hot_shutdown" next="check_pmc_shutdown" />
+	<step name="check_pmc_shutdown" action="compare_int_value" var="pmc_state" comparison="greater_than" value="6" goto="send_critical_hot_shutdown" next="check_drv_shutdown" />
+	<step name="check_drv_shutdown" action="compare_int_value" var="drv_state" comparison="greater_than" value="6" goto="send_critical_hot_shutdown" next="check_sys_fan_fail" />
+
+	<step name="send_critical_hot_shutdown"   action="set_int_value"   var="global_state"  value="7" next="set_sys_fan_max" />
+
+	<!-- raise/clear fan alert and continue -->
+	<step name="check_sys_fan_fail"  action="compare_int_value"      var="global_state"    comparison="less_than"   value="100" interval="570"  goto="check_sys_fan_fail2"  next="check_drv_state_pending" />
+	<step name="check_sys_fan_fail2" action="compare_fan_functional" source="system_fan"    index="0"       comparison="equal"   value="no"   goto="send_sys_fan_fail"   next="clear_sys_fan_fail" />
+	<step name="send_sys_fan_fail"   action="set_alert"              source="alert"         type="29,0"              next="send_sys_fan_fail2" />
+	<step name="send_sys_fan_fail2"  action="set_alert"              source="command_alert" type="fan_not_working"   next="check_drv_state_pending" />
+	<step name="clear_sys_fan_fail"  action="clear_alert"            source="alert"         type="29,0"              next="clear_sys_fan_fail2" />
+	<step name="clear_sys_fan_fail2" action="clear_alert"            source="command_alert" type="fan_not_working"   next="check_drv_state_pending" />
+
+	<!-- check for pending shutdown / t2 state -->
+	<step name="check_drv_state_pending"      action="compare_int_value"   var="drv_state"         comparison="greater_than"  value="5" goto="send_drv_pending" next="check_cpu_overtemp" />
+	<step name="send_drv_pending"       action="set_int_value"       var="global_state"       value="6" next="set_sys_fan_max" />
+
+	<!-- raise overtemp alert if necessary and continue -->
+	<step name="check_cpu_overtemp" action="compare_int_value" var="cpu_state" comparison="greater_than" value="4" goto="send_overtemp_alert" next="check_pmc_overtemp" />
+	<step name="check_pmc_overtemp" action="compare_int_value" var="pmc_state" comparison="greater_than" value="4" goto="send_overtemp_alert" next="check_drv_overtemp" />
+	<step name="check_drv_overtemp" action="compare_int_value" var="drv_state" comparison="greater_than" value="4" goto="send_overtemp_alert" next="check_cpu_sys_fan_max" />
+
+	<step name="send_overtemp_alert"   action="set_int_value"    var="global_state"            value="5"                       next="set_sys_fan_max" />
+
+	<!-- set sys fan max if needed, if so set and start over -->
+	<step name="check_cpu_sys_fan_max" action="compare_int_value" var="cpu_state" comparison="greater_than" value="3" goto="set_global_danger" next="check_pmc_sys_fan_max" />
+	<step name="check_pmc_sys_fan_max" action="compare_int_value" var="pmc_state" comparison="greater_than" value="3" goto="set_global_danger" next="check_drv_sys_fan_max" />
+	<step name="check_drv_sys_fan_max" action="compare_int_value" var="drv_state" comparison="greater_than" value="3" goto="set_global_danger" next="check_cpu_sys_fan_inc" />
+
+	<step name="set_global_danger"  action="set_int_value" var="global_state" value="4" next="set_sys_fan_max" />
+	<step name="set_sys_fan_max"  action="compare_int_value"      var="global_state"    comparison="less_than"   value="100" interval="10"  goto="set_sys_fan_max2"  next="send_temp_alert" />
+	<step name="set_sys_fan_max2" action="set_fan"       source="system_fan"   index="0" value="255" next="send_temp_alert" />
+
+	<!-- inc sys fan if needed, if so, start over. if not continue -->
+	<step name="check_cpu_sys_fan_inc" action="compare_int_value" var="cpu_state" comparison="greater_than" value="2" interval="10"  goto="inc_sys_fan" next="check_pmc_sys_fan_inc" />
+	<step name="check_pmc_sys_fan_inc" action="compare_int_value" var="pmc_state" comparison="greater_than" value="2" interval="30"  goto="inc_sys_fan" next="check_drv_sys_fan_inc" />
+	<step name="check_drv_sys_fan_inc" action="compare_int_value" var="drv_state" comparison="greater_than" value="2" interval="570" goto="inc_sys_fan" next="check_cpu_sys_fan_dec" />
+
+	<step name="inc_sys_fan"   action="set_int_value" var="global_state" value="3" next="inc_sys_fan2" />
+	<step name="inc_sys_fan2"  action="increment_fan" source="system_fan" index="0" delta="25" limit="255" next="send_temp_alert" />
+
+	<!-- dec sys fan if needed -->
+	<step name="check_cpu_sys_fan_dec" action="compare_int_value" var="cpu_state" comparison="less_than" value="2" goto="check_pmc_sys_fan_dec" next="nochange_sys_fan" />
+	<step name="check_pmc_sys_fan_dec" action="compare_int_value" var="pmc_state" comparison="less_than" value="2" goto="check_drv_sys_fan_dec" next="nochange_sys_fan" />
+	<step name="check_drv_sys_fan_dec" action="compare_int_value" var="drv_state" comparison="less_than" value="2" goto="check_cool_or_under"   next="nochange_sys_fan" />
+
+	<step name="check_cool_or_under"   action="compare_int_value" var="cpu_state" comparison="less_than" value="1" goto="set_global_under" next="check_cool_or_under2" />
+	<step name="check_cool_or_under2"  action="compare_int_value" var="pmc_state" comparison="less_than" value="1" goto="set_global_under" next="check_cool_or_under3" />
+	<step name="check_cool_or_under3"  action="compare_int_value" var="drv_state" comparison="less_than" value="1" goto="set_global_under" next="set_global_cool" />
+
+	<step name="set_global_under"  action="set_int_value" var="global_state" value="0" next="dec_sys_fan" />
+	<step name="set_global_cool"  action="set_int_value" var="global_state" value="1" next="dec_sys_fan" />
+
+	<step name="dec_sys_fan"        action="compare_int_value" var="global_state" comparison="less_than" value="2" interval="570" goto="dec_sys_fan2" next="nochange_sys_fan2" />
+	<step name="dec_sys_fan2"       action="decrement_fan" source="system_fan" index="0" delta="25" limit="55" next="send_temp_alert" />
+
+	<step name="nochange_sys_fan"        action="set_int_value" var="global_state" value="2" next="nochange_sys_fan2" />
+	<step name="nochange_sys_fan2"  action="compare_int_value"      var="global_state"    comparison="less_than"   value="100" interval="10"  goto="nochange_sys_fan3"  next="send_temp_alert" />
+	<step name="nochange_sys_fan3"   action="increment_fan" source="system_fan" index="0" delta="0" limit="255" next="send_temp_alert" />
+
+	<!-- handle alert and system conditions -->
+	<step name="send_temp_alert"    action="compare_int_value"      var="ex_global_state"    comparison="greater_than"  value="0"  goto="check_normal_temp_alert"       next="handle_ex_under_temp" />
+	<step name="check_normal_temp_alert"    action="compare_int_value"      var="ex_global_state"    comparison="greater_than"  value="4"  goto="check_over_temp_alert" next="handle_ex_normal_temp" />
+	<step name="check_over_temp_alert"    action="compare_int_value"      var="ex_global_state"    comparison="greater_than"  value="5"  goto="check_pending_temp_alert" next="handle_ex_over_temp" />
+	<step name="check_pending_temp_alert"    action="compare_int_value"      var="ex_global_state"    comparison="greater_than"  value="6"  goto="handle_pending_to_extreme_temp" next="handle_ex_pending_temp" />
+
+	<step name="handle_ex_under_temp" action="compare_int_value" var="global_state" comparison="greater_than" value="0" goto="handle_under_to_normal_temp" next="set_ex_under" />
+	<step name="handle_under_to_normal_temp" action="clear_alert" source="alert" type="2,0" next="handle_under_to_normal_temp2" />
+	<step name="handle_under_to_normal_temp2" action="clear_alert" source="command_alert" type="system_under_temperature" next="handle_under_to_normal_temp3" />
+	<step name="handle_under_to_normal_temp3" action="set_alert"   source="alert" type="2003,0"  next="set_ex_normal" />
+
+	<step name="handle_ex_normal_temp" action="compare_int_value" var="global_state" comparison="less_than" value="1" goto="handle_normal_to_under_temp" next="handle_ex_normal_temp2" />
+	<step name="handle_normal_to_under_temp"  action="clear_alert" source="alert" type="2003,0" next="handle_normal_to_under_temp2" />
+	<step name="handle_normal_to_under_temp2" action="set_alert"   source="alert" type="2,0"  next="handle_normal_to_under_temp3" />
+	<step name="handle_normal_to_under_temp3" action="set_alert" source="command_alert" type="system_under_temperature" next="set_ex_under" />
+
+	<step name="handle_ex_normal_temp2" action="compare_int_value" var="global_state" comparison="greater_than" value="4" goto="handle_normal_to_over_temp" next="set_ex_normal"/>
+	<step name="handle_normal_to_over_temp"  action="clear_alert" source="alert" type="2003,0" next="handle_normal_to_over_temp2" />
+	<step name="handle_normal_to_over_temp2" action="set_alert"   source="alert" type="1,0"  next="handle_normal_to_over_temp3"/>
+	<step name="handle_normal_to_over_temp3" action="set_alert" source="command_alert" type="system_over_temperature" next="set_ex_over" />
+
+	<step name="handle_ex_over_temp" action="compare_int_value" var="global_state" comparison="less_than" value="5" goto="handle_over_to_normal_temp" next="handle_ex_over_temp2" />
+	<step name="handle_over_to_normal_temp" action="clear_alert" source="alert" type="1,0" next="handle_over_to_normal_temp2" />
+	<step name="handle_over_to_normal_temp2" action="clear_alert" source="command_alert" type="system_over_temperature" next="handle_over_to_normal_temp3" />
+	<step name="handle_over_to_normal_temp3" action="set_alert"   source="alert" type="2003,0"  next="set_ex_normal" />
+
+	<step name="handle_ex_over_temp2" action="compare_int_value" var="global_state" comparison="greater_than" value="5" goto="handle_over_to_pending_temp" next="set_ex_over" />
+	<step name="handle_over_to_pending_temp"  action="clear_alert" source="alert" type="1,0" next="handle_over_to_pending_temp2" />
+	<step name="handle_over_to_pending_temp2" action="clear_alert" source="command_alert" type="system_over_temperature" next="handle_over_to_pending_temp_skip" />
+	<step name="handle_over_to_pending_temp_skip" action="compare_int_value" var="drv_state" comparison="greater_than" value="5" goto="handle_over_to_pending_temp3" next="set_ex_pending" />
+	<step name="handle_over_to_pending_temp3" action="set_alert"   source="alert" type="5,0"  next="handle_over_to_pending_temp4" />
+	<step name="handle_over_to_pending_temp4" action="set_alert" source="command_alert" type="system_pending_shutdown"  next="handle_over_to_pending_temp5" />
+	<step name="handle_over_to_pending_temp5" action="set_alert" source="command_alert" type="system_safe_mode"  next="handle_over_to_pending_temp6" />
+
+	<step name="handle_ex_pending_temp" action="compare_int_value" var="global_state" comparison="less_than" value="6" goto="handle_pending_to_over_temp" next="handle_ex_pending_temp2" />
+	<step name="handle_pending_to_over_temp"  action="compare_int_value" var="pending_shutdown"          comparison="greater_than" value="0"   goto="handle_pending_to_over_temp2"       next="handle_pending_to_over_temp4" />
+	<step name="handle_pending_to_over_temp2"  action="set_int_value"     var="pending_shutdown"          value="0"                 next="handle_pending_to_over_temp3" />
+	<step name="handle_pending_to_over_temp3"  action="system"            command="/opt/wd/sbin/send_pending_shutdown.sh -c"   next="handle_pending_to_over_temp4" />
+	<step name="handle_pending_to_over_temp4"  action="clear_alert" source="alert" type="5,0" next="handle_pending_to_over_temp5" />
+	<step name="handle_pending_to_over_temp5" action="clear_alert" source="command_alert" type="system_pending_shutdown" next="handle_pending_to_over_temp6" />
+	<step name="handle_pending_to_over_temp6" action="clear_alert" source="command_alert" type="system_safe_mode" next="handle_pending_to_over_temp7" />
+	<step name="handle_pending_to_over_temp7" action="set_alert"   source="alert" type="1,0"  next="handle_pending_to_over_temp8" />
+	<step name="handle_pending_to_over_temp8" action="set_alert" source="command_alert" type="system_over_temperature" next="set_ex_over" />
+
+	<step name="handle_ex_pending_temp2" action="compare_int_value" var="global_state" comparison="greater_than" value="6" goto="handle_pending_to_extreme_temp" next="send_pending_shutdown" />
+
+	<step name="handle_pending_to_extreme_temp"  action="compare_int_value" var="pending_shutdown"          comparison="greater_than" value="0"   goto="handle_pending_to_extreme_temp2"       next="handle_pending_to_extreme_temp4" />
+	<step name="handle_pending_to_extreme_temp2"  action="set_int_value"     var="pending_shutdown"          value="0"                 next="handle_pending_to_extreme_temp3" />
+	<step name="handle_pending_to_extreme_temp3"  action="system"            command="/opt/wd/sbin/send_pending_shutdown.sh -c"   next="handle_pending_to_extreme_temp4" />
+
+	<step name="handle_pending_to_extreme_temp4"  action="clear_alert" source="alert" type="5,0" next="handle_pending_to_extreme_temp5" />
+	<step name="handle_pending_to_extreme_temp5" action="clear_alert" source="command_alert" type="system_pending_shutdown" next="handle_pending_to_extreme_temp6" />
+	<step name="handle_pending_to_extreme_temp6" action="set_alert"   source="alert" type="6,0"  next="shutdown" />
+
+	<step name="set_ex_under"  action="set_int_value" var="ex_global_state" value="0" />
+	<step name="set_ex_normal"  action="set_int_value" var="ex_global_state" value="1" />
+	<step name="set_ex_over"  action="set_int_value" var="ex_global_state" value="5" />
+	<step name="set_ex_pending"  action="set_int_value" var="ex_global_state" value="6" />
+	<step name="set_ex_extreme"  action="set_int_value" var="ex_global_state" value="7" />
+
+	<step name="handle_over_to_pending_temp6"      action="system" command="/opt/wd/sbin/send_pending_shutdown.sh -c"  next="send_pending_shutdown" />
+	<step name="send_pending_shutdown"      action="compare_int_value"   var="drv_state"         comparison="less_than"  value="100"  interval="10"  goto="send_pending_shutdown2"    next="set_ex_pending" />
+	<step name="send_pending_shutdown2"   action="set_int_value"     var="pending_shutdown"          value="1"                 next="send_pending_shutdown3" />
+	<step name="send_pending_shutdown3"  action="system"              command="/opt/wd/sbin/send_pending_shutdown.sh -s 3600" next="set_ex_pending" />
+
+	<step name="shutdown" action="system"    command="immediately_shutdown.sh" next="set_ex_extreme" />
+	
+    </thermal>
+</thermal_config>
