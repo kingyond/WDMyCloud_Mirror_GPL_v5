@@ -130,6 +130,7 @@ jobs:
         patch -p1 < lpd-conf-20220211.patch
         unix2dos define_js-20220212.patch
         patch --binary -p1 < define_js-20220212.patch
+        patch -p1 < thermal-20220306.patch
         ./mksquashfs.sh
         cp -f image.cfs ../merge/
         cp image.cfs $GITHUB_WORKSPACE/output/bin/image.cfs
