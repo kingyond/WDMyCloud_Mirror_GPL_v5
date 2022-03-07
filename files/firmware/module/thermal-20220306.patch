@@ -1,6 +1,6 @@
-diff --git a/crfs/wd/BVBZ-thermal.xml b/crfs/wd/BVBZ-thermal.xml
---- a/crfs/wd/BVBZ-thermal.xml
-+++ b/crfs/wd/BVBZ-thermal.xml
+diff --git a/crfs/etc.wd/BVBZ-thermal.xml b/crfs/etc.wd/BVBZ-thermal.xml
+--- a/crfs/etc.wd/BVBZ-thermal.xml
++++ b/crfs/etc.wd/BVBZ-thermal.xml
 @@ -36,29 +36,29 @@
  	<!-- set component temperature state and continue -->
  	<step name="start"             action="compare_temperature"    source="cpu" index="*" comparison="greater_than"    value="114.0"  interval="10" goto="set_cpu_extreme" next="check_cpu_danger" />
@@ -43,9 +43,9 @@ diff --git a/crfs/wd/BVBZ-thermal.xml b/crfs/wd/BVBZ-thermal.xml
  
  	<step name="set_cpu_under"   action="set_int_value" var="cpu_state" value="0" next="check_pmc_extreme" />
  	<step name="set_cpu_cool"    action="set_int_value" var="cpu_state" value="1" next="check_pmc_extreme" />
-diff --git a/crfs/wd/BWAZ-thermal.xml b/crfs/wd/BWAZ-thermal.xml
---- a/crfs/wd/BWAZ-thermal.xml
-+++ b/crfs/wd/BWAZ-thermal.xml
+diff --git a/crfs/etc.wd/BWAZ-thermal.xml b/crfs/etc.wd/BWAZ-thermal.xml
+--- a/crfs/etc.wd/BWAZ-thermal.xml
++++ b/crfs/etc.wd/BWAZ-thermal.xml
 @@ -36,11 +36,11 @@
  	<!-- set component temperature state and continue -->
  	<step name="start"             action="compare_temperature"    source="cpu" index="*" comparison="greater_than"    value="114.0"  interval="10" goto="set_cpu_extreme" next="check_cpu_danger" />
