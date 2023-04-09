@@ -3,8 +3,8 @@ name: WDMyCloud_Mirror_GPL_v5.20 firmware
 on:
   repository_dispatch:
   workflow_dispatch:
-  schedule:
-    - cron: 0 0 * * *
+#  schedule:
+#    - cron: 0 0 * * *
 
 env:
   SRC_URL: https://downloads.wdc.com/gpl/WDMyCloud_Mirror_GPL_v5.20.113_20220124.tar.gz
